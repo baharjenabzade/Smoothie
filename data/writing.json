@@ -1,0 +1,18 @@
+[
+    {
+        "type": "Opinion",
+        "question": "Some people believe that technology has made people's lives more complicated rather than easier. To what extent do you agree or disagree?"
+    },
+    {
+        "type": "Discussion",
+        "question": "Some people believe that university education should be free for everyone. Others believe students should pay for their education. Discuss both views and give your own opinion."
+    },
+    {
+        "type": "Advantages and Disadvantages",
+        "question": "More people are choosing to work from home rather than travel to a workplace every day. What are the advantages and disadvantages of this development?"
+    },
+    {
+        "type": "Problem and Solution",
+        "question": "Many cities around the world are experiencing increasing levels of traffic congestion. What are the main causes of this problem, and what solutions can you suggest?"
+    }
+]

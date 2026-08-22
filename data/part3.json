@@ -1,0 +1,50 @@
+[
+    {
+        "topic": "Technology",
+        "questions": [
+            "Do you think technology has made people's lives better?",
+            "How has technology changed the way people communicate?",
+            "Do you think people rely too much on technology?",
+            "What impact will artificial intelligence have on society?"
+        ],
+        "vocabulary": [
+            "technological advancement",
+            "digital transformation",
+            "social interaction",
+            "automation",
+            "productivity",
+            "technological dependence"
+        ],
+        "collocations": [
+            "rely heavily on technology",
+            "transform the way people communicate",
+            "increase productivity",
+            "reduce human interaction",
+            "raise concerns about privacy"
+        ]
+    },
+    {
+        "topic": "Education",
+        "questions": [
+            "What are the most important qualities of a good teacher?",
+            "Should students be allowed to use technology in class?",
+            "Is online education as effective as traditional education?",
+            "What skills should schools teach children?"
+        ],
+        "vocabulary": [
+            "critical thinking",
+            "academic achievement",
+            "practical skills",
+            "lifelong learning",
+            "educational resources",
+            "independent learning"
+        ],
+        "collocations": [
+            "develop critical thinking skills",
+            "achieve academic success",
+            "gain practical experience",
+            "have access to educational resources",
+            "encourage independent learning"
+        ]
+    }
+]
