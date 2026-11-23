@@ -1,6 +1,0 @@
-streamlit
-ollama
-chromadb
-sentence-transformers
-pypdf
-python-docx
