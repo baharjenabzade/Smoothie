@@ -191,7 +191,7 @@ export function evaluationView(ev, answerText = null) {
           h(
             "div",
             { class: "issue" },
-            h("div", { class: "pair" }, h("del", {}, g.original), " ", h("ins", {}, g.corrected), " ", chip(g.category, "chip-blue")),
+            h("div", { class: "pair" }, h("del", {}, g.original), " ", h("ins", {}, g.corrected), " ", chip(g.category, "chip-accent")),
             h("p", { class: "muted", style: "margin:4px 0 0" }, g.explanation),
           ),
         ),

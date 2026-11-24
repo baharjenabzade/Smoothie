@@ -92,7 +92,7 @@ export async function render(root, ctx) {
     const items = await api.grammarIssues({ category: catSel.value, limit: PAGE, offset });
     offset += items.length;
     for (const g of items) {
-      list.append(h("div", { class: "issue" }, h("div", { class: "pair" }, h("del", {}, g.original), " ", h("ins", {}, g.corrected), " ", chip(g.category, "chip-blue")), h("p", { class: "muted", style: "margin:4px 0 0" }, g.explanation)));
+      list.append(h("div", { class: "issue" }, h("div", { class: "pair" }, h("del", {}, g.original), " ", h("ins", {}, g.corrected), " ", chip(g.category, "chip-accent")), h("p", { class: "muted", style: "margin:4px 0 0" }, g.explanation)));
     }
     if (!list.children.length) list.append(h("p", { class: "muted" }, "No corrections in this category."));
     moreHost.replaceChildren();

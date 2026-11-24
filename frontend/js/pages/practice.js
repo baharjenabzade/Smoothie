@@ -112,7 +112,7 @@ export async function render(root, ctx) {
               h(
                 "li",
                 {},
-                h("div", { class: "row-main" }, h("div", {}, h("div", { class: "row-title" }, q.text), h("div", { class: "row-meta" }, chip(q.topic), q.is_ai_generated ? chip("AI generated", "chip-blue") : null)), h("button", { class: "btn", type: "button", onclick: () => choose(q) }, "Practise this")),
+                h("div", { class: "row-main" }, h("div", {}, h("div", { class: "row-title" }, q.text), h("div", { class: "row-meta" }, chip(q.topic), q.is_ai_generated ? chip("AI generated", "chip-accent") : null)), h("button", { class: "btn", type: "button", onclick: () => choose(q) }, "Practise this")),
               ),
             ),
           )

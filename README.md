@@ -1,4 +1,4 @@
-# IELTS Speaking Coach 🎯
+# Smoothies: IELTS Speaking Coach 🎯
 
 An AI-powered backend for personalised IELTS Speaking practice: question banks for all three parts, AI-generated questions and sample answers, criterion-based answer evaluation, grammar and vocabulary analysis, and progress tracking.
 
@@ -50,7 +50,12 @@ Check that the model is reachable: `GET /health/ai` returns `{"reachable": true,
 
 ## Web interface
 
-The API serves a ready-to-use web app at **http://localhost:8000/** (no Node, npm or CDN needed; it is plain HTML, CSS and JavaScript in `frontend/`).
+The product is called **Smoothies**. The API serves the whole website (no Node, npm or CDN needed; it is plain HTML, CSS and JavaScript in `frontend/`):
+
+- **http://localhost:8000/** is the front page, with the animated word-smoothie hero.
+- **http://localhost:8000/app/** is the practice app (sign up, practise, dashboard).
+
+The look is a purple-and-coral flat-illustration theme. Colours live as variables at the top of `frontend/css/styles.css`; the front page is `frontend/index.html` with `css/landing.css`, and the animation is `js/smoothie.js`.
 
 - **Practice**: pick a part and topic, get a random or AI-generated question, type or paste what you said, and get your answer back *marked*: each grammar error struck through with the correction beside it, plus criterion scores, vocabulary and a stronger version of the answer. Also a sample answer at any band, and follow-up questions.
 - **Dashboard**: band trend against your target, criterion averages, recurring mistakes, recent sessions.

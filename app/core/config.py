@@ -12,7 +12,7 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
-    app_name: str = "IELTS Speaking Coach"
+    app_name: str = "Smoothies"
     environment: Literal["development", "test", "production"] = "development"
     api_prefix: str = "/api/v1"
 

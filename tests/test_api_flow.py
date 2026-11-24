@@ -383,7 +383,10 @@ def test_dashboard_summarises_progress(client, auth, llm):
 
 def test_web_ui_is_served_without_shadowing_the_api(client):
     page = client.get("/")
-    assert page.status_code == 200 and "IELTS Speaking Coach" in page.text
+    assert page.status_code == 200 and "Smoothies" in page.text and 'id="smoothie"' in page.text
+    app_page = client.get("/app/")
+    assert app_page.status_code == 200 and "../js/main.js" in app_page.text
+    assert "javascript" in client.get("/js/smoothie.js").headers["content-type"]
     script = client.get("/js/main.js")
     assert script.status_code == 200 and "javascript" in script.headers["content-type"]
     assert "text/css" in client.get("/css/styles.css").headers["content-type"]

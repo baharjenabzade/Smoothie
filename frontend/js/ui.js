@@ -43,6 +43,17 @@ export function setChildren(node, ...children) {
   appendChildren(node, children);
 }
 
+/** The Smoothies cup-and-straw mark. */
+export function brandMark(size = 26) {
+  return s(
+    "svg",
+    { viewBox: "0 0 24 24", width: size, height: size, "aria-hidden": "true" },
+    s("path", { d: "M5 8h14l-1.6 12.2a1.4 1.4 0 0 1-1.4 1.2H8a1.4 1.4 0 0 1-1.4-1.2z", fill: "#f6665c" }),
+    s("rect", { x: 4, y: 6, width: 16, height: 3.4, rx: 1.7, fill: "#fff1dc" }),
+    s("path", { d: "M13.5 6l2.6-4", stroke: "#fff1dc", "stroke-width": 2, "stroke-linecap": "round", fill: "none" }),
+  );
+}
+
 export function toast(message, kind = "info", ms = 5000) {
   const host = document.getElementById("toasts");
   if (!host) return;

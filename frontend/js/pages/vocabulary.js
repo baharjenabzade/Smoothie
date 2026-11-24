@@ -30,7 +30,7 @@ export async function render(root, ctx) {
       h(
         "div",
         { class: "row-main" },
-        h("div", {}, h("div", { class: "row-title" }, item.term, " ", chip(item.item_type)), h("p", { style: "margin:2px 0 0" }, item.definition), item.example ? h("p", { class: "example" }, item.example) : null, h("div", { class: "row-meta" }, item.topic ? chip(item.topic) : null, item.times_seen > 1 ? chip(`Seen ${item.times_seen} times`, "chip-blue") : null, item.source === "suggestion" ? chip("Suggested", "chip-green") : null)),
+        h("div", {}, h("div", { class: "row-title" }, item.term, " ", chip(item.item_type)), h("p", { style: "margin:2px 0 0" }, item.definition), item.example ? h("p", { class: "example" }, item.example) : null, h("div", { class: "row-meta" }, item.topic ? chip(item.topic) : null, item.times_seen > 1 ? chip(`Seen ${item.times_seen} times`, "chip-accent") : null, item.source === "suggestion" ? chip("Suggested", "chip-green") : null)),
         del,
       ),
     );

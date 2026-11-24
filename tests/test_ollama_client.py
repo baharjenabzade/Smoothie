@@ -83,6 +83,22 @@ def test_missing_model_gives_pull_hint():
     assert "ollama pull qwen3:8b" in exc.value.message
 
 
+def test_server_error_includes_ollamas_explanation():
+    body = {"error": "model requires more system memory (5.6 GiB) than is available (3.1 GiB)"}
+    client = make_client(lambda r: httpx.Response(500, json=body))
+    with pytest.raises(LLMError) as exc:
+        generate(client)
+    assert exc.value.status_code == 502
+    assert "(500)" in exc.value.message and "more system memory" in exc.value.message
+
+
+def test_non_json_error_body_is_not_echoed():
+    client = make_client(lambda r: httpx.Response(502, text="<html>Bad Gateway from proxy</html>"))
+    with pytest.raises(LLMError) as exc:
+        generate(client)
+    assert exc.value.message == "The AI model server returned an error (502)"
+
+
 def test_unreachable_server_gives_503():
     def handler(request):
         raise httpx.ConnectError("connection refused")

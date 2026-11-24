@@ -1,11 +1,11 @@
 import { api, setToken } from "../api.js";
-import { h, errorBox, withBusy, s } from "../ui.js";
+import { h, errorBox, withBusy, brandMark } from "../ui.js";
 
 const BAND_OPTIONS = [];
 for (let b = 4; b <= 9; b += 0.5) BAND_OPTIONS.push(b);
 
-export function renderAuth(app, ctx) {
-  let mode = "login";
+export function renderAuth(app, ctx, initialMode = "login") {
+  let mode = initialMode;
   const formHost = h("div", {});
   const tabs = h("div", { class: "seg", role: "group", "aria-label": "Account" });
 
@@ -73,8 +73,6 @@ export function renderAuth(app, ctx) {
     formHost.replaceChildren(form);
   }
 
-  const mark = s("svg", { viewBox: "0 0 24 24", width: 15, height: 15, fill: "none", stroke: "currentColor", "stroke-width": "3", "stroke-linecap": "round", "stroke-linejoin": "round" }, s("path", { d: "M5 13l4 4 10-11" }));
-
   app.replaceChildren(
     h(
       "div",
@@ -82,7 +80,7 @@ export function renderAuth(app, ctx) {
       h(
         "div",
         { class: "pitch" },
-        h("span", { class: "brand" }, h("span", { class: "brand-mark" }, mark), "IELTS Speaking Coach"),
+        h("a", { class: "brand", href: "../" }, h("span", { class: "brand-mark" }, brandMark(30)), "Smoothies"),
         h("h1", {}, "Practise speaking. See exactly what to fix."),
         h("p", {}, "Answer questions from all three parts of the test, then get your answer back marked: each grammar slip struck through with the correction beside it."),
         h("ul", {}, h("li", {}, "Scores for fluency and coherence, vocabulary, and grammar"), h("li", {}, "A vocabulary notebook built from your own answers"), h("li", {}, "A record of the mistakes that keep coming back")),

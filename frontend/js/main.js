@@ -1,5 +1,5 @@
 import { api, getToken, setToken, onUnauthorized } from "./api.js";
-import { h, s, spinner } from "./ui.js";
+import { h, brandMark, spinner } from "./ui.js";
 import { renderAuth } from "./pages/auth.js";
 import { render as dashboard } from "./pages/dashboard.js";
 import { render as practice } from "./pages/practice.js";
@@ -50,7 +50,7 @@ function renderUserMenu() {
   shell.userMenu.replaceChildren(
     h("a", { href: "#/account" }, ctx.user.full_name || ctx.user.email),
     h("span", { class: "muted" }, `Target ${Number(ctx.user.target_band).toFixed(1)}`),
-    h("button", { class: "btn btn-quiet", type: "button", onclick: logout }, "Log out"),
+    h("button", { class: "btn btn-small", type: "button", onclick: logout }, "Log out"),
   );
 }
 
@@ -58,11 +58,10 @@ function buildShell() {
   const nav = h("nav", { class: "nav", "aria-label": "Main" }, NAV.map(([key, label]) => h("a", { href: `#/${key}`, "data-key": key }, label)));
   const userMenu = h("div", { class: "user-menu" });
   const main = h("main", { class: "page", id: "view", tabindex: "-1" });
-  const mark = s("svg", { viewBox: "0 0 24 24", fill: "none", "stroke-width": "3", "stroke-linecap": "round", "stroke-linejoin": "round" }, s("path", { d: "M5 13l4 4 10-11" }));
   const header = h(
     "header",
     { class: "topbar" },
-    h("div", { class: "topbar-inner" }, h("a", { class: "brand", href: "#/dashboard" }, h("span", { class: "brand-mark" }, mark), "IELTS Speaking Coach"), nav, userMenu),
+    h("div", { class: "topbar-inner" }, h("a", { class: "brand", href: "#/dashboard" }, h("span", { class: "brand-mark" }, brandMark(28)), "Smoothies"), nav, userMenu),
   );
   app.replaceChildren(header, main);
   shell = { nav, userMenu, main };
@@ -84,15 +83,16 @@ async function route() {
   const arg = match && match[2] ? Number(match[2]) : null;
 
   if (!getToken()) {
-    if (name !== "login") {
+    if (name !== "login" && name !== "register") {
       window.location.hash = "#/login";
       return;
     }
     shell = null;
-    renderAuth(app, ctx);
+    document.title = "Smoothies";
+    renderAuth(app, ctx, name === "register" ? "register" : "login");
     return;
   }
-  if (name === "login") {
+  if (name === "login" || name === "register") {
     window.location.hash = "#/dashboard";
     return;
   }
@@ -119,7 +119,7 @@ async function route() {
   setActive(name === "account" ? "" : name);
   const view = h("div", {});
   shell.main.replaceChildren(view);
-  document.title = `${name.charAt(0).toUpperCase()}${name.slice(1)} · IELTS Speaking Coach`;
+  document.title = `${name.charAt(0).toUpperCase()}${name.slice(1)} · Smoothies`;
   window.scrollTo(0, 0);
   view.append(spinner());
   try {
