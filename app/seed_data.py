@@ -139,6 +139,10 @@ def iter_seed_questions() -> Iterator[dict[str, Any]]:
             yield {"part": 1, "topic": topic, "text": text, "cue_points": None}
     for topic, (text, cues) in PART_2.items():
         yield {"part": 2, "topic": topic, "text": text, "cue_points": list(cues)}
+    from app.seed_cue_cards import EXTRA_PART_2
+
+    for topic, (text, cues) in EXTRA_PART_2.items():
+        yield {"part": 2, "topic": topic, "text": text, "cue_points": list(cues)}
     for topic, texts in PART_3.items():
         for text in texts:
             yield {"part": 3, "topic": topic, "text": text, "cue_points": None}

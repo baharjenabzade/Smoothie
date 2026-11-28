@@ -1,0 +1,41 @@
+"""Extra Part 2 cue cards, one per theme, so that topic clusters have plenty to practise.
+
+All wording is original practice material written for this project.
+"""
+
+EXTRA_PART_2: dict[str, tuple[str, tuple[str, ...]]] = {
+    "Useful website": ("Describe a website you find useful.", ("what the website is", "how you found it", "what you use it for", "why it is useful to you")),
+    "Favourite app": ("Describe an app on your phone that you use often.", ("what the app does", "when you started using it", "how often you use it", "why you like it")),
+    "Gadget you own": ("Describe a piece of technology that you own and value.", ("what it is", "when and how you got it", "what you use it for", "why it matters to you")),
+    "Social media": ("Describe a social media platform that you use.", ("what it is", "how you use it", "who you follow or talk to", "whether you think it is good for you")),
+    "Online learning": ("Describe a time when you learned something online.", ("what you learned", "which website or course you used", "how long it took", "how you felt about learning online")),
+    "Useful invention": ("Describe an invention that you think is useful.", ("what it is", "who uses it", "how it works", "how it has changed people's lives")),
+    "Influential person": ("Describe a person who has had an influence on you.", ("who the person is", "how you know them", "what they did", "why they influenced you")),
+    "Helpful person": ("Describe a person who helped you when you needed it.", ("who the person is", "what the problem was", "how they helped", "how you felt afterwards")),
+    "Someone you admire": ("Describe someone you admire.", ("who the person is", "how you know about them", "what they have achieved", "why you admire them")),
+    "Interesting job": ("Describe a job that you think is interesting.", ("what the job is", "what people do in it", "what skills it needs", "why you find it interesting")),
+    "Good company": ("Describe a person you enjoy spending time with.", ("who the person is", "how you met", "what you do together", "why you enjoy their company")),
+    "Expensive purchase": ("Describe something expensive that you bought.", ("what it was", "why you bought it", "how you paid for it", "whether it was worth the money")),
+    "Saving money": ("Describe something you saved money for.", ("what you wanted", "how long you saved", "how you saved the money", "how you felt when you got it")),
+    "Shopping trip": ("Describe a shopping experience that you remember.", ("where you went", "who you went with", "what you bought", "why you remember it")),
+    "Big decision": ("Describe an important decision that you made.", ("what the decision was", "when you made it", "who or what influenced you", "whether it was a good decision")),
+    "Something you want": ("Describe something you would like to buy in the future.", ("what it is", "why you want it", "how much it costs", "how you plan to pay for it")),
+    "Childhood memory": ("Describe a happy memory from your childhood.", ("when it happened", "where you were and who was there", "what happened", "why it is a happy memory")),
+    "Memorable event": ("Describe an event that you will never forget.", ("what the event was", "when and where it took place", "who was there", "why you remember it so well")),
+    "Busy day": ("Describe a day when you were very busy.", ("when it was", "what you had to do", "how you managed your time", "how you felt at the end of the day")),
+    "Skill you learned": ("Describe a skill that you learned.", ("what the skill is", "how you learned it", "how long it took", "how it has been useful to you")),
+    "Teacher": ("Describe a teacher who influenced you.", ("who the teacher was", "what they taught", "what they were like", "why they influenced you")),
+    "Book you enjoyed": ("Describe a book that you enjoyed reading.", ("what the book is", "what it is about", "when you read it", "why you enjoyed it")),
+    "Memorable journey": ("Describe a journey that you remember well.", ("where you went", "how you travelled", "who you went with", "why you remember it")),
+    "Natural place": ("Describe a natural place that you like.", ("where it is", "what it looks like", "what you can do there", "why you like it")),
+    "Environment": ("Describe something you do to help protect the environment.", ("what you do", "when you started", "how easy it is", "what difference it makes")),
+    "Career ambition": ("Describe an ambition that you have.", ("what it is", "when you first thought of it", "what you are doing to achieve it", "why it is important to you")),
+    "Film you enjoyed": ("Describe a film that you enjoyed watching.", ("what the film is", "what it is about", "who you watched it with", "why you enjoyed it")),
+    "Music": ("Describe a piece of music that you like.", ("what it is", "when you first heard it", "when you listen to it", "why you like it")),
+    "Festival": ("Describe a festival or celebration in your country.", ("what it is", "when it takes place", "what people do", "why it is important")),
+    "Healthy habit": ("Describe a healthy habit that you have.", ("what the habit is", "when you started it", "how often you do it", "how it benefits you")),
+    "Special meal": ("Describe a meal that you enjoyed.", ("what you ate", "where and when you had it", "who you were with", "why you enjoyed it")),
+    "Sport or exercise": ("Describe a sport or form of exercise that you enjoy.", ("what it is", "how often you do it", "who you do it with", "why you enjoy it")),
+    "Favourite building": ("Describe a building that you like.", ("where it is", "what it looks like", "what it is used for", "why you like it")),
+    "Place to visit": ("Describe a place that you like to visit.", ("where it is", "how often you go there", "what you do there", "why you like it")),
+}

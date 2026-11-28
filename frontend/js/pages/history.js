@@ -1,4 +1,5 @@
 import { api } from "../api.js";
+import { banner } from "../art.js";
 import { h, toast, formatBand, formatDate, plural, emptyState, chip, errorBox } from "../ui.js";
 import { PART_LABELS, evaluationView } from "../components.js";
 
@@ -7,7 +8,7 @@ const PAGE = 20;
 export async function render(root, ctx, sessionId) {
   if (sessionId) return renderDetail(root, ctx, sessionId);
 
-  root.append(h("div", { class: "page-head" }, h("h1", {}, "History"), h("p", { class: "lede" }, "Every practice session, newest first.")));
+  root.append(banner({ title: "History", lede: "Every practice session, newest first.", image: "roadmap", compact: true }));
   const list = h("ul", { class: "rows" });
   const moreHost = h("div", {});
   let offset = 0;

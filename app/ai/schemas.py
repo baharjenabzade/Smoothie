@@ -8,7 +8,7 @@ Validators normalise small deviations instead of failing the whole request.
 import math
 from typing import Annotated, Any, Literal, get_args
 
-from pydantic import BaseModel, BeforeValidator
+from pydantic import BaseModel, BeforeValidator, Field
 
 from app.core.scoring import round_band
 
@@ -123,6 +123,8 @@ class StructureUsed(BaseModel):
 
 
 class CriterionFeedback(BaseModel):
+    # Listed first so the model gathers quotes/observations before it commits to a score.
+    evidence: list[str] = Field(default_factory=list)
     score: BandScore
     summary: str
     strengths: list[str]
@@ -187,3 +189,22 @@ class Recommendations(BaseModel):
     summary: str
     focus_areas: list[FocusArea]
     weekly_routine: list[str]
+
+
+# --------------------------------------------------------------------------- story adaptation
+
+
+class CuePointPlan(BaseModel):
+    cue_point: str
+    what_to_say: str
+
+
+class StoryAdaptation(BaseModel):
+    fit: Literal["strong", "partial", "weak"]
+    angle: str
+    opening_line: str
+    emphasise: list[str]
+    details_to_change: list[str]
+    cue_point_plan: list[CuePointPlan]
+    useful_collocations: list[VocabularyEntry]
+    watch_out: list[str]

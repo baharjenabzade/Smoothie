@@ -5,8 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Smoothies: IELTS speaking practice, smoothed out</title>
   <meta name="description" content="Practise all three parts of IELTS Speaking, get your answers back marked line by line, and see which mistakes keep coming back.">
-  <meta name="color-scheme" content="dark">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232a1a66'/%3E%3Cpath d='M9 12h14l-2 15H11z' fill='%23f6665c'/%3E%3Crect x='7' y='9' width='18' height='4' rx='2' fill='%23fff1dc'/%3E%3Cpath d='M18 9l3-6' stroke='%23fff1dc' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="color-scheme" content="light">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/landing.css">
 </head>
@@ -32,22 +37,31 @@
     <!-- ================= hero ================= -->
     <section class="hero">
       <svg class="hero-scene" viewBox="0 0 1440 820" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
-        <circle cx="270" cy="210" r="92" fill="#8466c2" opacity=".45"/>
-        <circle cx="1010" cy="150" r="15" fill="#f6665c" opacity=".85"/>
-        <circle cx="1010" cy="150" r="30" fill="none" stroke="#f6665c" stroke-width="1.5" opacity=".35"/>
-        <g fill="#fff1dc" opacity=".7"><circle cx="560" cy="120" r="2"/><circle cx="780" cy="86" r="1.6"/><circle cx="1180" cy="230" r="2"/><circle cx="90" cy="90" r="1.8"/><circle cx="410" cy="290" r="1.5"/><circle cx="1320" cy="120" r="1.6"/><circle cx="905" cy="260" r="1.4"/></g>
+        <circle cx="270" cy="210" r="92" fill="#d8c6ff" opacity=".55"/>
+        <circle cx="1010" cy="150" r="15" fill="#ffd15c" opacity=".9"/>
+        <circle cx="1010" cy="150" r="30" fill="none" stroke="#ff9a85" stroke-width="2" opacity=".45"/>
+        <!-- sparkles -->
+        <g fill="#ffd15c">
+          <path d="M560 112 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z"/>
+          <path d="M1180 222 l4 9 9 4 -9 4 -4 9 -4 -9 -9 -4 9 -4z"/>
+          <circle cx="780" cy="86" r="3" fill="#c3a6ff"/>
+          <circle cx="90" cy="110" r="3.5" fill="#ff9a85" opacity=".7"/>
+          <circle cx="410" cy="290" r="3" fill="#c3a6ff"/>
+          <circle cx="1320" cy="120" r="3.5" fill="#ffd15c"/>
+          <circle cx="905" cy="260" r="2.5" fill="#b49bf2"/>
+        </g>
         <!-- far hills -->
-        <path d="M0 560 C150 470 300 470 430 535 C560 600 700 500 880 470 C1040 442 1190 500 1440 455 V820 H0Z" fill="#5a3d98"/>
+        <path d="M0 560 C150 470 300 470 430 535 C560 600 700 500 880 470 C1040 442 1190 500 1440 455 V820 H0Z" fill="#e2d4ff"/>
         <!-- mid hills -->
-        <path d="M0 650 C210 570 380 630 540 618 C740 602 880 530 1080 570 C1230 598 1340 566 1440 548 V820 H0Z" fill="#43288a"/>
-        <path d="M0 650 C210 570 380 630 540 618 C740 602 880 530 1080 570 C1230 598 1340 566 1440 548" fill="none" stroke="#f6665c" stroke-width="2.5" opacity=".55" stroke-linecap="round"/>
-        <!-- near hill (same colour as the page below) -->
-        <path d="M0 740 C250 672 430 722 660 712 C920 700 1110 636 1440 676 V820 H0Z" fill="#2a1a66"/>
-        <path d="M0 740 C250 672 430 722 660 712 C920 700 1110 636 1440 676" fill="none" stroke="#f6665c" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M0 650 C210 570 380 630 540 618 C740 602 880 530 1080 570 C1230 598 1340 566 1440 548 V820 H0Z" fill="#d4c0fc"/>
+        <path d="M0 650 C210 570 380 630 540 618 C740 602 880 530 1080 570 C1230 598 1340 566 1440 548" fill="none" stroke="#ff9a85" stroke-width="2.5" opacity=".5" stroke-linecap="round"/>
+        <!-- near hill (matches --bg seamlessly) -->
+        <path d="M0 740 C250 672 430 722 660 712 C920 700 1110 636 1440 676 V820 H0Z" fill="#f6f1ff"/>
+        <path d="M0 740 C250 672 430 722 660 712 C920 700 1110 636 1440 676" fill="none" stroke="#ff755f" stroke-width="3" opacity=".65" stroke-linecap="round"/>
         <!-- little plants on the hills -->
-        <g transform="translate(150 722)"><path d="M0 0 C-14 -22 -12 -58 0 -80 C12 -58 14 -22 0 0Z" fill="#8E72D6"/><path d="M-22 6 C-34 -10 -30 -34 -22 -50 C-12 -34 -10 -10 -22 6Z" fill="#FF8F8C"/></g>
-        <g transform="translate(1290 668) scale(.9)"><path d="M0 0 C-14 -22 -12 -58 0 -80 C12 -58 14 -22 0 0Z" fill="#B9A6EE"/><path d="M22 6 C34 -10 30 -34 22 -50 C12 -34 10 -10 22 6Z" fill="#6A4DB8"/></g>
-        <g transform="translate(760 706) scale(.6)"><path d="M0 0 C-14 -22 -12 -58 0 -80 C12 -58 14 -22 0 0Z" fill="#8E72D6" opacity=".85"/></g>
+        <g transform="translate(150 722)"><path d="M0 0 C-14 -22 -12 -58 0 -80 C12 -58 14 -22 0 0Z" fill="#8b6be0"/><path d="M-22 6 C-34 -10 -30 -34 -22 -50 C-12 -34 -10 -10 -22 6Z" fill="#ff8f7d"/></g>
+        <g transform="translate(1290 668) scale(.9)"><path d="M0 0 C-14 -22 -12 -58 0 -80 C12 -58 14 -22 0 0Z" fill="#a88ef0"/><path d="M22 6 C34 -10 30 -34 22 -50 C12 -34 10 -10 22 6Z" fill="#7c56e6"/></g>
+        <g transform="translate(760 706) scale(.6)"><path d="M0 0 C-14 -22 -12 -58 0 -80 C12 -58 14 -22 0 0Z" fill="#b49bf2"/></g>
       </svg>
 
       <div class="hero-inner">
@@ -93,16 +107,16 @@
             </g>
 
             <g id="cupG">
-              <path d="M140 330 L460 330 L422 690 Q420 706 404 706 L196 706 Q180 706 178 690 Z" fill="#FFF1DC" fill-opacity=".14"/>
+              <path d="M140 330 L460 330 L422 690 Q420 706 404 706 L196 706 Q180 706 178 690 Z" fill="#ffffff" fill-opacity=".55"/>
               <g clip-path="url(#cupClip)">
                 <path id="liq" fill="#FFE1DC"/>
-                <path id="foam" fill="none" stroke="#FFF1DC" stroke-width="4" stroke-linecap="round" opacity=".7"/>
+                <path id="foam" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity=".85"/>
                 <g id="bubbles"></g>
                 <g id="inside"></g>
               </g>
-              <path d="M160 372 L186 640" stroke="#fff" stroke-opacity=".28" stroke-width="6" stroke-linecap="round" fill="none"/>
-              <path d="M140 330 L460 330 L422 690 Q420 706 404 706 L196 706 Q180 706 178 690 Z" fill="none" stroke="#FFF1DC" stroke-width="7" stroke-linejoin="round"/>
-              <rect x="118" y="314" width="364" height="18" rx="9" fill="#FFF1DC"/>
+              <path d="M160 372 L186 640" stroke="#fff" stroke-opacity=".6" stroke-width="6" stroke-linecap="round" fill="none"/>
+              <path d="M140 330 L460 330 L422 690 Q420 706 404 706 L196 706 Q180 706 178 690 Z" fill="none" stroke="#5b3d99" stroke-width="6" stroke-linejoin="round"/>
+              <rect x="118" y="314" width="364" height="18" rx="9" fill="#d9c6ff" stroke="#5b3d99" stroke-width="4"/>
             </g>
 
             <g id="outside"></g>
@@ -128,43 +142,19 @@
         <h2 class="block-title">Say it. Get it marked. Say it better.</h2>
 
         <div class="row">
-          <div class="row-copy">
-            <h3>Practise the way the test is built</h3>
-            <p>Part 1 interview questions, Part 2 cue cards and Part 3 discussion questions, sorted by topic. Need something new? Ask for fresh questions on any topic you like.</p>
-            <p>Type or paste what you said, for example from your phone's voice typing, and send it in.</p>
-          </div>
-          <div class="row-art">
-            <svg viewBox="0 0 440 340" role="img" aria-label="A learner in a headset speaks. Her answer appears in a speech bubble made of word pills.">
-              <circle cx="300" cy="130" r="100" fill="#7b5db8" opacity=".3"/>
-              <path d="M0 272 C70 238 150 258 230 252 C320 246 380 228 440 240 V340 H0Z" fill="#43288a"/>
-              <path d="M0 272 C70 238 150 258 230 252 C320 246 380 228 440 240" fill="none" stroke="#f6665c" stroke-width="3" stroke-linecap="round"/>
-              <path d="M0 304 C90 284 170 304 260 296 C340 290 400 280 440 286 V340 H0Z" fill="#2a1a66"/>
-              <g transform="translate(120 0)">
-                <path d="M-54 280 C-54 228 -28 206 0 206 C28 206 54 228 54 280 Z" fill="#FFA11D"/>
-                <path d="M-28 176 C-28 142 -10 136 0 136 C10 136 28 142 28 176 L28 200 Q28 204 24 204 L-24 204 Q-28 204 -28 200Z" fill="#3B3A74"/>
-                <circle cx="0" cy="176" r="26" fill="#FFC8BE"/>
-                <path d="M-27 168 Q-21 143 2 143 Q25 143 28 168 Q14 156 0 158 Q-14 158 -27 168Z" fill="#3B3A74"/>
-                <circle cx="-8" cy="176" r="2.4" fill="#2B2A57"/><circle cx="8" cy="176" r="2.4" fill="#2B2A57"/>
-                <circle cx="-15" cy="184" r="5" fill="#FF8F8C" opacity=".8"/><circle cx="15" cy="184" r="5" fill="#FF8F8C" opacity=".8"/>
-                <ellipse cx="0" cy="187" rx="4.2" ry="3.4" fill="#E8524F"/>
-                <path d="M-29 174 C-29 134 29 134 29 174" fill="none" stroke="#fff1dc" stroke-width="5" stroke-linecap="round"/>
-                <rect x="-35" y="166" width="11" height="22" rx="5.5" fill="#f6665c"/><rect x="24" y="166" width="11" height="22" rx="5.5" fill="#f6665c"/>
-                <path d="M-30 184 Q-24 202 -7 194" fill="none" stroke="#fff1dc" stroke-width="3" stroke-linecap="round"/>
-                <circle cx="-6" cy="194" r="4.4" fill="#f6665c"/>
-              </g>
-              <g fill="none" stroke="#b8a9e6" stroke-width="3" stroke-linecap="round"><path d="M168 172 q9 10 0 20"/><path d="M178 164 q15 18 0 36"/></g>
-              <g transform="translate(206 44)">
-                <path d="M22 0 H196 Q218 0 218 22 V92 Q218 114 196 114 H88 L56 146 L60 114 H22 Q0 114 0 92 V22 Q0 0 22 0Z" fill="#FFF1DC"/>
-                <rect x="22" y="24" width="72" height="22" rx="11" fill="#F7B733"/>
-                <rect x="102" y="24" width="52" height="22" rx="11" fill="#B9D96C"/>
-                <rect x="162" y="24" width="34" height="22" rx="11" fill="#FFD2A8"/>
-                <rect x="22" y="56" width="110" height="22" rx="11" fill="#3C4A9E"/>
-                <rect x="140" y="56" width="48" height="22" rx="11" fill="#F28A2E"/>
-                <rect x="22" y="86" width="64" height="14" rx="7" fill="#9ED8C0"/>
-              </g>
-            </svg>
-          </div>
-        </div>
+  <div class="row-copy">
+    <h3>Practise the way the test is built</h3>
+    <p>Part 1 interview questions, Part 2 cue cards and Part 3 discussion questions, sorted by topic. Need something new? Ask for fresh questions on any topic you like.</p>
+    <p>Record yourself and listen back, then type or dictate what you said and send it in to be marked. Marking your voice directly is on the way.</p>
+  </div>
+  <div class="row-art">
+    <img
+      src="img/practise-headset.webp"
+      alt="Learner in a headset speaking with a pastel speech bubble"
+      class="mascot-art"
+    />
+  </div>
+</div>
 
         <div class="row row-flip">
           <div class="row-art">
@@ -186,31 +176,19 @@
         </div>
 
         <div class="row">
-          <div class="row-copy">
-            <h3>Keep the words that worked</h3>
-            <p>Collocations, idioms and phrasal verbs from your own answers drop into a notebook, along with suggested upgrades. Short on ideas for a topic? Blend a fresh word list on the spot.</p>
-          </div>
-          <div class="row-art">
-            <svg viewBox="0 0 440 340" role="img" aria-label="Word pills dropping into a cup of smoothie.">
-              <circle cx="150" cy="140" r="96" fill="#7b5db8" opacity=".3"/>
-              <path d="M0 290 C80 262 170 286 250 278 C330 270 392 256 440 264 V340 H0Z" fill="#43288a"/>
-              <path d="M0 290 C80 262 170 286 250 278 C330 270 392 256 440 264" fill="none" stroke="#f6665c" stroke-width="3" stroke-linecap="round"/>
-              <path d="M0 318 C100 302 180 320 270 314 C350 308 410 300 440 304 V340 H0Z" fill="#2a1a66"/>
-              <defs><clipPath id="cup2"><path d="M146 156 L294 156 L278 298 Q277 308 268 308 L172 308 Q163 308 162 298Z"/></clipPath></defs>
-              <path d="M146 156 L294 156 L278 298 Q277 308 268 308 L172 308 Q163 308 162 298Z" fill="#FFF1DC" fill-opacity=".14"/>
-              <g clip-path="url(#cup2)"><path d="M140 226 Q175 216 220 226 T300 224 V320 H140Z" fill="#FF9490"/><path d="M140 226 Q175 216 220 226 T300 224" fill="none" stroke="#FFF1DC" stroke-width="4" stroke-linecap="round" opacity=".7"/><circle cx="190" cy="270" r="5" fill="none" stroke="#FFF1DC" stroke-width="2"/><circle cx="238" cy="252" r="4" fill="none" stroke="#FFF1DC" stroke-width="2"/><circle cx="214" cy="288" r="3" fill="#2B2A57"/></g>
-              <path d="M146 156 L294 156 L278 298 Q277 308 268 308 L172 308 Q163 308 162 298Z" fill="none" stroke="#FFF1DC" stroke-width="6" stroke-linejoin="round"/>
-              <rect x="134" y="142" width="172" height="15" rx="7.5" fill="#FFF1DC"/>
-              <path d="M268 142 L292 66" stroke="#FFF6E8" stroke-width="7" stroke-linecap="round"/>
-              <g font-family="'Segoe UI','Trebuchet MS',system-ui,sans-serif" font-weight="700" font-size="15" text-anchor="middle">
-                <g transform="translate(178 62) rotate(-13)"><rect x="-42" y="-15" width="84" height="30" rx="15" fill="#F7B733"/><text x="0" y="5.5" fill="#2B2A57">idioms</text></g>
-                <g transform="translate(300 36) rotate(9)"><rect x="-58" y="-15" width="116" height="30" rx="15" fill="#9ED8C0"/><text x="0" y="5.5" fill="#2B2A57">phrasal verb</text></g>
-                <g transform="translate(218 112) rotate(-5)"><rect x="-44" y="-15" width="88" height="30" rx="15" fill="#3C4A9E"/><text x="0" y="5.5" fill="#FFF1DC">fluency</text></g>
-                <g transform="translate(352 104) rotate(14)"><rect x="-56" y="-15" width="112" height="30" rx="15" fill="#F28A2E"/><text x="0" y="5.5" fill="#2B2A57">collocation</text></g>
-              </g>
-            </svg>
-          </div>
-        </div>
+  <div class="row-copy">
+    <h3>Keep the words that worked</h3>
+    <p>Collocations, idioms and phrasal verbs from your own answers drop into a notebook, along with suggested upgrades. Short on ideas for a topic? Blend a fresh word list on the spot.</p>
+  </div>
+  <div class="row-art" style="min-width: 0; display: flex; justify-content: center;">
+  <img
+    src="img/words-book-dark.webp"
+    alt="Happy smoothie mascot on books surrounded by idioms, phrasal verb, fluency, and collocation tags"
+    class="mascot-art"
+   
+  />
+</div>
+</div>
       </div>
     </section>
 
@@ -238,6 +216,31 @@
       </div>
     </section>
 
+    <!-- ================= topic groups and stories ================= -->
+    <section class="block block-parts" id="stories">
+      <div class="wrap">
+        <h2 class="block-title">Fewer stories, more cue cards</h2>
+        <img class="land-pic" src="img/stories-hero.webp" alt="A learner reading a glowing book while the Smoothies mascot looks on" width="1400" height="1045" loading="lazy">
+        <div class="parts">
+          <article>
+            <h3>Topic groups</h3>
+            <p>Sixty cue cards are really ten themes. Practise by group, and see which topics connect.</p>
+            <p class="sample">Technology and digital life: a website, an app, a gadget, learning online…</p>
+          </article>
+          <article>
+            <h3>Story Studio</h3>
+            <p>Write one real experience once. Smoothies shows which cue cards it can answer and how to adapt it, without memorising a script.</p>
+            <p class="sample">“Learning graphic design online” can answer a skill, a website, a decision and saving money.</p>
+          </article>
+          <article>
+            <h3>Listen &amp; learn</h3>
+            <p>Short illustrated stories you can read and hear, with the expressions worth borrowing.</p>
+            <p class="sample">“A Trip That Changed My Plans”: break down, offer a lift, go to plan.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <!-- ================= progress path ================= -->
     <section class="block" id="path">
       <div class="wrap">
@@ -245,40 +248,117 @@
           <h2 class="block-title">A smoother path to your target band</h2>
           <p>Your dashboard shows your band over time, the criterion costing you the most marks, and the mistakes that keep coming back. Then it builds a practice plan around them.</p>
         </div>
+        <img class="land-pic wide" src="img/roadmap.webp" alt="The mascot walking a winding road toward a trophy on a hill" width="1400" height="781" loading="lazy">
       </div>
       <div class="path-art">
+        <!-- Mobile path -->
         <svg class="path-small" viewBox="0 0 400 330" role="img" aria-label="A winding path climbs the hills from Today, through Next focus, to a flag marking your target band.">
-          <circle cx="300" cy="90" r="64" fill="#7b5db8" opacity=".28"/>
-          <path d="M0 210 C70 170 150 200 230 170 C300 144 350 120 400 104 V330 H0Z" fill="#43288a"/>
-          <path d="M0 210 C70 170 150 200 230 170 C300 144 350 120 400 104" fill="none" stroke="#f6665c" stroke-width="3" opacity=".6" stroke-linecap="round"/>
-          <path d="M0 280 C100 256 200 286 300 262 C350 250 380 240 400 238 V330 H0Z" fill="#2a1a66"/>
-          <path d="M0 280 C100 256 200 286 300 262 C350 250 380 240 400 238" fill="none" stroke="#f6665c" stroke-width="3.5" stroke-linecap="round"/>
-          <path d="M34 300 C100 296 120 250 190 240 C250 232 262 188 300 160 C326 140 336 112 340 78" fill="none" stroke="#fff1dc" stroke-opacity=".22" stroke-width="16" stroke-linecap="round"/>
-          <path d="M34 300 C100 296 120 250 190 240 C250 232 262 188 300 160 C326 140 336 112 340 78" fill="none" stroke="#f6665c" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 11"/>
-          <g font-family="'Segoe UI','Trebuchet MS',system-ui,sans-serif" font-weight="700" font-size="15" fill="#fff1dc">
-            <circle cx="58" cy="298" r="10" fill="#fff1dc" stroke="#f6665c" stroke-width="4"/><text x="76" y="294">Today</text>
-            <circle cx="196" cy="239" r="10" fill="#fff1dc" stroke="#f6665c" stroke-width="4"/><text x="212" y="262">Next focus</text>
-            <circle cx="296" cy="163" r="10" fill="#fff1dc" stroke="#f6665c" stroke-width="4"/><text x="150" y="152">Getting closer</text>
+          <defs>
+            <linearGradient id="hillBackSm" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#e3d5ff"/>
+              <stop offset="100%" stop-color="#f6f1ff"/>
+            </linearGradient>
+            <linearGradient id="hillFrontSm" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#d4c0fc"/>
+              <stop offset="100%" stop-color="#f6f1ff"/>
+            </linearGradient>
+            <filter id="pillShadowSm" x="-20%" y="-20%" width="140%" height="160%">
+              <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#38225c" flood-opacity="0.1"/>
+            </filter>
+          </defs>
+          <circle cx="300" cy="86" r="56" fill="#ffd15c" opacity=".25"/>
+          <path d="M0 210 C70 170 150 200 230 170 C300 144 350 120 400 104 V330 H0Z" fill="url(#hillBackSm)"/>
+          <path d="M0 210 C70 170 150 200 230 170 C300 144 350 120 400 104" fill="none" stroke="#c8b0fa" stroke-width="2" stroke-linecap="round"/>
+          <path d="M0 276 C100 252 200 282 300 258 C350 246 380 236 400 234 V330 H0Z" fill="url(#hillFrontSm)"/>
+          <path d="M0 276 C100 252 200 282 300 258 C350 246 380 236 400 234" fill="none" stroke="#ff9a85" stroke-width="2.5" opacity=".65" stroke-linecap="round"/>
+          <!-- path -->
+          <path d="M34 296 C100 292 120 248 190 238 C250 230 262 186 300 158 C326 138 336 110 340 78" fill="none" stroke="#ffffff" stroke-opacity=".75" stroke-width="14" stroke-linecap="round"/>
+          <path d="M34 296 C100 292 120 248 190 238 C250 230 262 186 300 158 C326 138 336 110 340 78" fill="none" stroke="#ff755f" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 11"/>
+          <!-- milestones -->
+          <g font-family="'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif" font-weight="700" font-size="13" fill="#38225c" text-anchor="middle">
+            <circle cx="58" cy="294" r="9" fill="#ffffff" stroke="#ff755f" stroke-width="4"/>
+            <g filter="url(#pillShadowSm)"><rect x="24" y="254" width="68" height="26" rx="13" fill="#ffffff"/><text x="58" y="271">Today</text></g>
+
+            <circle cx="196" cy="236" r="9" fill="#ffffff" stroke="#ff755f" stroke-width="4"/>
+            <g filter="url(#pillShadowSm)"><rect x="148" y="196" width="96" height="26" rx="13" fill="#ffffff"/><text x="196" y="213">Next focus</text></g>
+
+            <circle cx="296" cy="160" r="9" fill="#ffffff" stroke="#ff755f" stroke-width="4"/>
+            <g filter="url(#pillShadowSm)"><rect x="234" y="120" width="124" height="26" rx="13" fill="#ffffff"/><text x="296" y="137">Getting closer</text></g>
           </g>
-          <path d="M340 78 V20" stroke="#fff1dc" stroke-width="4" stroke-linecap="round"/><path d="M340 22 L384 38 L340 56Z" fill="#f6665c"/><circle cx="340" cy="78" r="7" fill="#fff1dc"/>
-          <text x="340" y="104" font-family="'Segoe UI','Trebuchet MS',system-ui,sans-serif" font-weight="700" font-size="15" fill="#fff1dc" text-anchor="middle">Target band</text>
+          <!-- flag -->
+          <path d="M340 78 V20" stroke="#38225c" stroke-width="4" stroke-linecap="round"/>
+          <path d="M340 22 L384 38 L340 54Z" fill="#ff755f"/>
+          <circle cx="340" cy="78" r="7" fill="#ffd15c" stroke="#38225c" stroke-width="2.5"/>
+          <g filter="url(#pillShadowSm)" font-family="'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif" font-weight="700" font-size="13" text-anchor="middle">
+            <rect x="286" y="92" width="108" height="26" rx="13" fill="#38225c"/>
+            <text x="340" y="109" fill="#ffffff">Target band</text>
+          </g>
         </svg>
+
+        <!-- Desktop path -->
         <svg class="path-wide" viewBox="0 0 1200 380" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A winding path climbs the hills from Today, through Next focus, to a flag marking your target band.">
-          <circle cx="930" cy="110" r="84" fill="#7b5db8" opacity=".28"/>
-          <path d="M0 250 C160 190 300 230 440 220 C620 206 760 130 960 150 C1080 162 1140 136 1200 120 V380 H0Z" fill="#43288a"/>
-          <path d="M0 250 C160 190 300 230 440 220 C620 206 760 130 960 150 C1080 162 1140 136 1200 120" fill="none" stroke="#f6665c" stroke-width="3" opacity=".6" stroke-linecap="round"/>
-          <path d="M0 330 C200 290 360 330 560 314 C760 298 940 250 1200 270 V380 H0Z" fill="#2a1a66"/>
-          <path d="M0 330 C200 290 360 330 560 314 C760 298 940 250 1200 270" fill="none" stroke="#f6665c" stroke-width="3.5" stroke-linecap="round"/>
-          <!-- the path -->
-          <path d="M70 352 C250 340 300 280 470 270 C640 260 700 190 850 176 C960 166 1030 150 1090 100" fill="none" stroke="#fff1dc" stroke-opacity=".22" stroke-width="22" stroke-linecap="round"/>
-          <path d="M70 352 C250 340 300 280 470 270 C640 260 700 190 850 176 C960 166 1030 150 1090 100" fill="none" stroke="#f6665c" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 14"/>
-          <g font-family="'Segoe UI','Trebuchet MS',system-ui,sans-serif" font-weight="700" font-size="17" fill="#fff1dc" text-anchor="middle">
-            <circle cx="150" cy="346" r="13" fill="#fff1dc" stroke="#f6665c" stroke-width="5"/><text x="150" y="318">Today</text>
-            <circle cx="560" cy="262" r="13" fill="#fff1dc" stroke="#f6665c" stroke-width="5"/><text x="560" y="234">Next focus</text>
-            <circle cx="930" cy="170" r="13" fill="#fff1dc" stroke="#f6665c" stroke-width="5"/><text x="930" y="142">Getting closer</text>
+          <defs>
+            <linearGradient id="hillBack" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#e5d9ff"/>
+              <stop offset="100%" stop-color="#f6f1ff"/>
+            </linearGradient>
+            <linearGradient id="hillFront" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#d4c0fc"/>
+              <stop offset="100%" stop-color="#f6f1ff"/>
+            </linearGradient>
+            <filter id="pillShadow" x="-20%" y="-20%" width="140%" height="160%">
+              <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#38225c" flood-opacity="0.1"/>
+            </filter>
+          </defs>
+
+          <!-- soft sun & sparkles -->
+          <circle cx="940" cy="108" r="78" fill="#ffd15c" opacity=".24"/>
+          <path d="M1030 48 l4 10 10 4 -10 4 -4 10 -4 -10 -10 -4 10 -4z" fill="#ffd15c"/>
+          <path d="M842 96 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z" fill="#c3a6ff"/>
+          <circle cx="1138" cy="94" r="4" fill="#ff9a85" opacity=".7"/>
+
+          <!-- pastel hills fading smoothly into the page background -->
+          <path d="M0 246 C160 186 300 226 440 216 C620 202 760 126 960 146 C1080 158 1140 132 1200 116 V380 H0Z" fill="url(#hillBack)"/>
+          <path d="M0 246 C160 186 300 226 440 216 C620 202 760 126 960 146 C1080 158 1140 132 1200 116" fill="none" stroke="#c8b0fa" stroke-width="2.5" stroke-linecap="round"/>
+
+          <path d="M0 326 C200 286 360 326 560 310 C760 294 940 246 1200 266 V380 H0Z" fill="url(#hillFront)"/>
+          <path d="M0 326 C200 286 360 326 560 310 C760 294 940 246 1200 266" fill="none" stroke="#ff9a85" stroke-width="3" opacity=".6" stroke-linecap="round"/>
+
+          <!-- the winding path -->
+          <path d="M70 348 C250 336 300 276 470 266 C640 256 700 186 850 172 C960 162 1030 146 1090 98" fill="none" stroke="#ffffff" stroke-opacity=".8" stroke-width="20" stroke-linecap="round"/>
+          <path d="M70 348 C250 336 300 276 470 266 C640 256 700 186 850 172 C960 162 1030 146 1090 98" fill="none" stroke="#ff755f" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 14"/>
+
+          <!-- milestones with crisp white pill badges -->
+          <g font-family="'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif" font-weight="700" font-size="15" fill="#38225c" text-anchor="middle">
+            <circle cx="150" cy="342" r="12" fill="#ffffff" stroke="#ff755f" stroke-width="5"/>
+            <g filter="url(#pillShadow)">
+              <rect x="108" y="286" width="84" height="32" rx="16" fill="#ffffff"/>
+              <text x="150" y="307">Today</text>
+            </g>
+
+            <circle cx="560" cy="258" r="12" fill="#ffffff" stroke="#ff755f" stroke-width="5"/>
+            <g filter="url(#pillShadow)">
+              <rect x="502" y="202" width="116" height="32" rx="16" fill="#ffffff"/>
+              <text x="560" y="223">Next focus</text>
+            </g>
+
+            <circle cx="930" cy="166" r="12" fill="#ffffff" stroke="#ff755f" stroke-width="5"/>
+            <g filter="url(#pillShadow)">
+              <rect x="858" y="110" width="144" height="32" rx="16" fill="#ffffff"/>
+              <text x="930" y="131">Getting closer</text>
+            </g>
           </g>
-          <g><path d="M1090 100 V30" stroke="#fff1dc" stroke-width="5" stroke-linecap="round"/><path d="M1090 32 L1150 52 L1090 74Z" fill="#f6665c"/><circle cx="1090" cy="100" r="8" fill="#fff1dc"/></g>
-          <text x="1090" y="130" font-family="'Segoe UI','Trebuchet MS',system-ui,sans-serif" font-weight="700" font-size="17" fill="#fff1dc" text-anchor="middle">Target band</text>
+
+          <!-- target flag & plum badge -->
+          <g>
+            <path d="M1090 98 V26" stroke="#38225c" stroke-width="4.5" stroke-linecap="round"/>
+            <path d="M1090 28 L1150 48 L1090 68Z" fill="#ff755f"/>
+            <circle cx="1090" cy="98" r="8" fill="#ffd15c" stroke="#38225c" stroke-width="3"/>
+          </g>
+          <g filter="url(#pillShadow)" font-family="'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif" font-weight="700" font-size="15" text-anchor="middle">
+            <rect x="1028" y="118" width="124" height="32" rx="16" fill="#38225c"/>
+            <text x="1090" y="139" fill="#ffffff">Target band</text>
+          </g>
         </svg>
       </div>
     </section>

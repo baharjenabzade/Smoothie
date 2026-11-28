@@ -1,4 +1,5 @@
 import { api } from "../api.js";
+import { banner } from "../art.js";
 import { h, toast, spinner, errorBox, withBusy, debounce, emptyState, chip } from "../ui.js";
 import { vocabCard } from "../components.js";
 
@@ -11,7 +12,7 @@ const SOURCES = [
 ];
 
 export async function render(root, ctx) {
-  root.append(h("div", { class: "page-head" }, h("h1", {}, "Vocabulary"), h("p", { class: "lede" }, "Words and phrases collected from your answers, plus topic lists you generate.")));
+  root.append(banner({ title: "Vocabulary", lede: "Words and phrases collected from your answers, plus topic lists you generate.", image: "vocab-hero", compact: true }));
 
   // ---- notebook ----
   const search = h("input", { id: "v-q", type: "text", placeholder: "Search terms", maxlength: 100 });
@@ -99,7 +100,7 @@ export async function render(root, ctx) {
       return;
     }
     return withBusy(genBtn, "Generating…", async () => {
-      genResult.replaceChildren(spinner("The local model is writing your word list. This can take a minute."));
+      genResult.replaceChildren(spinner("The AI is writing your word list. This can take up to a minute."));
       try {
         const r = await api.topicVocabulary({ topic, count: Number(countSel.value), save: saveBox.checked });
         genResult.replaceChildren(

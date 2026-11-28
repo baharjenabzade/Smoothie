@@ -1,0 +1,15 @@
+{
+  "samples": [
+    {
+      "part": 1,
+      "question": "Do you work or are you a student?",
+      "topic": "Work and study",
+      "band": 5.5,
+      "fluency": 5.5,
+      "lexical": 5.5,
+      "grammar": 5.0,
+      "answer": "PUT A REAL ANSWER HERE (this file starts with an underscore, so it is ignored. Copy it to a new name such as part1.json).",
+      "notes": "Why it earns this band: e.g. one idea only, repeated 'very good', article errors in 3 of 5 sentences."
+    }
+  ]
+}

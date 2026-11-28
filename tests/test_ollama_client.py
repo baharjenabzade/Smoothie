@@ -4,9 +4,9 @@ import pytest
 
 httpx = pytest.importorskip("httpx")
 
-from app.ai.client import OllamaClient  # noqa: E402
-from app.ai.schemas import FollowUpResult  # noqa: E402
-from app.core.errors import LLMError  # noqa: E402
+from app.ai.client import OllamaClient
+from app.ai.schemas import FollowUpResult
+from app.core.errors import LLMError
 
 VALID = '{"follow_up_questions": ["Why do you think so?"]}'
 
@@ -120,7 +120,7 @@ def test_timeout_gives_504():
 def test_health_reports_model_availability():
     models = {"models": [{"name": "qwen3:8b", "model": "qwen3:8b"}]}
     ok = make_client(lambda r: httpx.Response(200, json=models)).health()
-    assert ok == {"reachable": True, "model": "qwen3:8b", "model_available": True}
+    assert ok == {"provider": "ollama", "reachable": True, "model": "qwen3:8b", "model_available": True}
 
     missing = make_client(lambda r: httpx.Response(200, json={"models": []})).health()
     assert missing["reachable"] is True and missing["model_available"] is False

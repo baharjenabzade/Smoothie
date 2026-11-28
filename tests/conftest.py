@@ -4,8 +4,10 @@ import os
 os.environ["DATABASE_URL"] = "sqlite://"
 os.environ["SECRET_KEY"] = "test-secret-key-for-the-test-suite-only-0123456789"
 os.environ["ENVIRONMENT"] = "test"
+# API-flow tests assert the model's raw scores; strict calibration is unit-tested separately.
+os.environ["SCORING_STRICTNESS"] = "standard"
 
-import pytest  # noqa: E402
+import pytest
 
 # NOTE: heavy imports (fastapi, sqlalchemy, app.*) happen inside fixtures so the pure unit tests
 # (scoring, schemas, parsing, grounding, seed data) run even without the web stack installed.

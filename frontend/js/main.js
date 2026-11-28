@@ -3,6 +3,8 @@ import { h, brandMark, spinner } from "./ui.js";
 import { renderAuth } from "./pages/auth.js";
 import { render as dashboard } from "./pages/dashboard.js";
 import { render as practice } from "./pages/practice.js";
+import { render as stories } from "./pages/stories.js";
+import { render as library } from "./pages/library.js";
 import { render as history } from "./pages/history.js";
 import { render as vocabulary } from "./pages/vocabulary.js";
 import { render as insights } from "./pages/insights.js";
@@ -13,11 +15,13 @@ const app = document.getElementById("app");
 const NAV = [
   ["dashboard", "Dashboard"],
   ["practice", "Practice"],
+  ["stories", "Stories"],
+  ["library", "Library"],
   ["history", "History"],
   ["vocabulary", "Vocabulary"],
   ["insights", "Insights"],
 ];
-const PAGES = { dashboard, practice, history, vocabulary, insights, account };
+const PAGES = { dashboard, practice, stories, library, history, vocabulary, insights, account };
 
 const ctx = {
   user: null,
@@ -117,6 +121,7 @@ async function route() {
     return;
   }
   setActive(name === "account" ? "" : name);
+  shell.main.classList.toggle("wide", name === "practice");
   const view = h("div", {});
   shell.main.replaceChildren(view);
   document.title = `${name.charAt(0).toUpperCase()}${name.slice(1)} · Smoothies`;

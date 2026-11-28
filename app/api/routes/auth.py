@@ -7,7 +7,12 @@ from sqlalchemy.exc import IntegrityError
 
 from app.api.deps import CurrentUser, DbSession
 from app.core.errors import ConflictError
-from app.core.security import create_access_token, dummy_hash, hash_password, verify_password
+from app.core.security import (
+    create_access_token,
+    dummy_hash,
+    hash_password,
+    verify_password,
+)
 from app.models import User
 from app.schemas.user import Token, UserCreate, UserRead, UserUpdate
 

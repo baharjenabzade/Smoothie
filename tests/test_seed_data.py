@@ -1,15 +1,17 @@
 from collections import Counter
 
+from app.seed_cue_cards import EXTRA_PART_2
 from app.seed_data import PART_1, PART_2, PART_3, iter_seed_questions
 
 
 def test_expected_number_of_questions_per_part():
     counts = Counter(q["part"] for q in iter_seed_questions())
-    assert counts == {1: 24, 2: 6, 3: 18}
+    assert counts == {1: 24, 2: 6 + len(EXTRA_PART_2), 3: 18}
 
 
 def test_every_topic_exists_in_every_part():
     assert set(PART_1) == set(PART_2) == set(PART_3)
+    assert not set(EXTRA_PART_2) & set(PART_2)
 
 
 def test_part_2_are_cue_cards_and_others_are_not():

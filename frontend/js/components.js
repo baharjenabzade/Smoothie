@@ -49,42 +49,145 @@ export function vocabCard(entry) {
   );
 }
 
-/** Line chart of overall bands, oldest first. Plain SVG, no library. */
+//** Line chart of overall bands, oldest first. Plain SVG, no library. */
 export function trendChart(points, target) {
-  const W = 640;
-  const H = 230;
-  const pad = { l: 34, r: 16, t: 14, b: 28 };
+  const W = 680;
+  const H = 240;
+  const pad = { l: 36, r: 22, t: 22, b: 32 };
   const bands = points.map((p) => p.overall_band);
   let lo = Math.floor(Math.min(...bands, target ?? 9) - 1);
   let hi = Math.ceil(Math.max(...bands, target ?? 0) + 0.5);
   lo = Math.max(0, Math.min(lo, 4));
   hi = Math.min(9, Math.max(hi, lo + 3));
-  const x = (i) => pad.l + (points.length === 1 ? (W - pad.l - pad.r) / 2 : (i * (W - pad.l - pad.r)) / (points.length - 1));
+
+  const x = (i) =>
+    pad.l + (points.length === 1 ? (W - pad.l - pad.r) / 2 : (i * (W - pad.l - pad.r)) / (points.length - 1));
   const y = (v) => pad.t + ((hi - v) / (hi - lo)) * (H - pad.t - pad.b);
 
-  const svg = s("svg", { class: "chart", viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": `Overall band for your last ${points.length} answers` });
+  const coords = points.map((p, i) => ({
+    ...p,
+    cx: x(i),
+    cy: y(p.overall_band),
+    dateStr: new Date(p.created_at).toLocaleDateString(undefined, { month: "short", day: "numeric" }),
+  }));
+
+  const buildSmoothPath = (pts) => {
+    let d = `M ${pts[0].cx} ${pts[0].cy}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[i];
+      const p1 = pts[i + 1];
+      const midX = (p0.cx + p1.cx) / 2;
+      d += ` C ${midX} ${p0.cy}, ${midX} ${p1.cy}, ${p1.cx} ${p1.cy}`;
+    }
+    return d;
+  };
+
+  const uid = Math.random().toString(36).slice(2, 7);
+  const lineGradId = `trend-line-grad-${uid}`;
+  const areaGradId = `trend-area-grad-${uid}`;
+
+  const svg = s("svg", {
+    class: "chart trend-svg",
+    viewBox: `0 0 ${W} ${H}`,
+    role: "img",
+    "aria-label": `Overall band for your last ${points.length} answers`,
+  });
+
+  // Gradients
+  svg.append(
+    s(
+      "defs",
+      {},
+      s(
+        "linearGradient",
+        { id: lineGradId, x1: "0%", y1: "0%", x2: "100%", y2: "0%" },
+        s("stop", { offset: "0%", "stop-color": "#c4b5fd" }),
+        s("stop", { offset: "55%", "stop-color": "#f472b6" }),
+        s("stop", { offset: "100%", "stop-color": "#ff6b57" }),
+      ),
+      s(
+        "linearGradient",
+        { id: areaGradId, x1: "0%", y1: "0%", x2: "0%", y2: "100%" },
+        s("stop", { offset: "0%", "stop-color": "#ff6b57", "stop-opacity": "0.24" }),
+        s("stop", { offset: "65%", "stop-color": "#8b5cf6", "stop-opacity": "0.07" }),
+        s("stop", { offset: "100%", "stop-color": "#1f1247", "stop-opacity": "0" }),
+      ),
+    ),
+  );
+
+  // Horizontal grid + Y-axis labels
   for (let v = lo; v <= hi; v++) {
     svg.append(s("line", { class: "grid-line", x1: pad.l, x2: W - pad.r, y1: y(v), y2: y(v) }));
-    svg.append(s("text", { class: "axis-label", x: pad.l - 8, y: y(v) + 4, "text-anchor": "end" }, String(v)));
+    svg.append(s("text", { class: "axis-label", x: pad.l - 10, y: y(v) + 4, "text-anchor": "end" }, String(v)));
   }
-  if (target && target >= lo && target <= hi) {
-    svg.append(s("line", { class: "trend-target", x1: pad.l, x2: W - pad.r, y1: y(target), y2: y(target) }));
-    svg.append(s("text", { class: "target-label", x: pad.l + 6, y: y(target) - 5 }, `Target ${formatBand(target)}`));
-  }
-  if (points.length > 1) {
-    svg.append(s("polyline", { class: "trend-line", points: points.map((p, i) => `${x(i)},${y(p.overall_band)}`).join(" ") }));
-  }
-  points.forEach((p, i) => {
-    const date = new Date(p.created_at).toLocaleDateString(undefined, { dateStyle: "medium" });
-    svg.append(
-      s("circle", { class: "trend-dot", cx: x(i), cy: y(p.overall_band), r: 5 }, s("title", {}, `Band ${formatBand(p.overall_band)}, Part ${p.part}, ${date}`)),
-    );
-  });
-  svg.append(s("text", { class: "axis-label", x: pad.l, y: H - 6 }, "Older"));
-  svg.append(s("text", { class: "axis-label", x: W - pad.r, y: H - 6, "text-anchor": "end" }, "Newer"));
-  return svg;
-}
 
+  // Target dashed line + frosted pill badge on the right
+  if (target && target >= lo && target <= hi) {
+    const ty = y(target);
+    const pillW = 78;
+    svg.append(s("line", { class: "trend-target", x1: pad.l, x2: W - pad.r, y1: ty, y2: ty }));
+    svg.append(
+      s(
+        "g",
+        { class: "target-pill", transform: `translate(${W - pad.r - pillW}, ${ty - 24})` },
+        s("rect", { width: pillW, height: 20, rx: 10 }),
+        s("text", { x: pillW / 2, y: 13.5, "text-anchor": "middle" }, `Target ${formatBand(target)}`),
+      ),
+    );
+  }
+
+  // Smooth curve + gradient area fill
+  if (coords.length > 1) {
+    const lineD = buildSmoothPath(coords);
+    const baseY = y(lo);
+    const areaD = `${lineD} L ${coords[coords.length - 1].cx} ${baseY} L ${coords[0].cx} ${baseY} Z`;
+    svg.append(s("path", { class: "trend-area", d: areaD, fill: `url(#${areaGradId})` }));
+    svg.append(s("path", { class: "trend-line", d: lineD, stroke: `url(#${lineGradId})` }));
+  }
+
+  // Floating glass tooltip
+  const tooltip = h("div", { class: "trend-tooltip", "aria-hidden": "true" });
+
+  // Data points + hover events
+  coords.forEach((p, i) => {
+    const isLast = i === coords.length - 1;
+    if (isLast) {
+      svg.append(s("circle", { class: "trend-pulse", cx: p.cx, cy: p.cy, r: 6 }));
+    }
+
+    const dot = s(
+      "circle",
+      { class: `trend-dot${isLast ? " latest" : ""}`, cx: p.cx, cy: p.cy, r: isLast ? 6 : 5 },
+      s("title", {}, `Band ${formatBand(p.overall_band)}, Part ${p.part}, ${p.dateStr}`),
+    );
+
+    dot.addEventListener("mouseenter", () => {
+      tooltip.replaceChildren(
+        h("div", { class: "trend-tooltip-meta" }, `Part ${p.part} · ${p.dateStr}`),
+        h("strong", {}, `Band ${formatBand(p.overall_band)}`),
+      );
+      tooltip.style.left = `${(p.cx / W) * 100}%`;
+      tooltip.style.top = `${(p.cy / H) * 100}%`;
+      tooltip.classList.add("visible");
+    });
+
+    dot.addEventListener("mouseleave", () => {
+      tooltip.classList.remove("visible");
+    });
+
+    svg.append(dot);
+  });
+
+  // X-axis edge labels
+  const firstLabel = coords[0]?.dateStr ?? "Older";
+  const lastLabel = coords.length > 1 ? "Latest" : firstLabel;
+  svg.append(s("text", { class: "axis-label", x: pad.l, y: H - 6 }, firstLabel));
+  if (coords.length > 1) {
+    svg.append(s("text", { class: "axis-label", x: W - pad.r, y: H - 6, "text-anchor": "end" }, lastLabel));
+  }
+
+  return h("div", { class: "trend-card" }, svg, tooltip);
+}
 /** The learner's answer with each grammar error struck through and the fix beside it. */
 export function markedTranscript(text, issues) {
   const lower = text.toLowerCase();
@@ -172,6 +275,10 @@ export function evaluationView(ev, answerText = null) {
       }),
     ),
   );
+
+  if (fb.calibration_notes && fb.calibration_notes.length) {
+    root.append(h("section", { class: "section" }, h("h3", {}, "Why some scores are capped"), bulletList(fb.calibration_notes)));
+  }
 
   root.append(
     h(

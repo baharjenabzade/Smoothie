@@ -117,6 +117,24 @@ export const api = {
   grammarIssues: (params) => get("/learning/grammar-issues", params),
   weaknesses: () => get("/learning/weaknesses"),
   recommendations: () => get("/learning/recommendations"),
+  // clusters and stories
+  clusters: () => get("/clusters"),
+  stories: () => get("/stories"),
+  createStory: (body) => post("/stories", body),
+  updateStory: (id, body) => request("PUT", `/stories/${id}`, { body }),
+  deleteStory: (id) => request("DELETE", `/stories/${id}`),
+  storyMatches: (id) => get(`/stories/${id}/matches`),
+  suggestStories: (questionId) => get("/stories/suggest", { question_id: questionId }),
+  adaptStory: (id, questionId) => post(`/stories/${id}/adapt`, { question_id: questionId }),
+  // groups, import, similar questions
+  groups: () => get("/groups"),
+  group: (id, part) => get(`/groups/${id}`, { part }),
+  createGroup: (body) => post("/groups", body),
+  updateGroup: (id, body) => request("PUT", `/groups/${id}`, { body }),
+  deleteGroup: (id) => request("DELETE", `/groups/${id}`),
+  importQuestions: (body) => post("/questions/import", body),
+  questionGroups: (params) => get("/questions/groups", params),
+  similarQuestions: (id) => get(`/questions/${id}/similar`),
   // dashboard
   dashboard: () => get("/dashboard"),
 };

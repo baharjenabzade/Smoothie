@@ -1,6 +1,8 @@
 import { api } from "../api.js";
 import { h, setChildren, toast, spinner, errorBox, withBusy, countWords, chip } from "../ui.js";
 import { evaluationView, vocabCard } from "../components.js";
+import { makeRecorder } from "../recorder.js";
+import { banner, icon } from "../art.js";
 
 const PARTS = [
   { n: 1, title: "Part 1", desc: "Short answers about familiar topics. Aim for 2 to 4 sentences." },
@@ -9,65 +11,120 @@ const PARTS = [
 ];
 const LENGTH_HINT = { 1: "20 to 50 words", 2: "120 to 250 words", 3: "40 to 90 words" };
 const SAMPLE_BANDS = [5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9];
+const CLUSTER_ICON = { technology: "technology", people: "people", money: "money", memories: "memories", education: "education", "nature-travel": "nature-travel", work: "work", culture: "culture", lifestyle: "lifestyle", places: "places" };
+const TIPS = [
+  "Try natural collocations like “in my experience”, “to be honest” or “what really stood out was…”.",
+  "Add a reason and a tiny example to every answer: “because…, for instance…”.",
+  "For Part 2, one real story can answer several cue cards. Save it in Stories.",
+  "Pause and rephrase instead of repeating the same word. Paraphrasing earns lexical marks.",
+];
 
 function fullQuestionText(q) {
   const cues = q.cue_points && q.cue_points.length ? ` You should say: ${q.cue_points.join("; ")}.` : "";
   return `${q.text}${cues}`.slice(0, 1000);
 }
 
-function makeTimer() {
-  const out = h("span", { class: "timer" }, "0:00");
-  let started = 0;
-  let handle = null;
-  const button = h("button", { type: "button", class: "btn btn-quiet" }, "Start timer");
-  const tick = () => {
-    if (!out.isConnected) {
-      clearInterval(handle);
-      return;
-    }
-    const secs = Math.floor((Date.now() - started) / 1000);
-    out.textContent = `${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}`;
-  };
-  button.addEventListener("click", () => {
-    if (handle) {
-      clearInterval(handle);
-      handle = null;
-      button.textContent = "Start timer";
-    } else {
-      started = Date.now();
-      out.textContent = "0:00";
-      handle = setInterval(tick, 500);
-      button.textContent = "Stop timer";
-    }
-  });
-  return { out, button };
-}
-
 export async function render(root, ctx) {
-  const st = { part: 1, topic: "", question: null, session: null, answer: "" };
-  let topics = [];
+  const st = { part: 1, cluster: null, group: null, topic: "", question: null, session: null, answer: "" };
+  let clusters = [];
+  let myGroups = [];
+  let groupQuestions = [];
   try {
-    topics = await api.topics();
+    myGroups = await api.groups();
   } catch {
-    /* the topic list is optional; questions can still be fetched */
+    /* groups are optional */
+  }
+  try {
+    clusters = await api.clusters();
+  } catch {
+    /* clusters are optional; questions can still be fetched */
+  }
+  const clustersOf = (topic) => clusters.filter((c) => c.topics.some((t) => t.topic === topic));
+  const pending = ctx.pending && ctx.pending.question ? ctx.pending.question : null;
+  ctx.pending = null;
+  if (pending) {
+    st.part = pending.part;
+    st.topic = pending.topic;
+    st.cluster = (clustersOf(pending.topic)[0] || {}).slug || null;
   }
 
-  // --- containers (pages must keep references; root's children are moved after render) ---
+  // --- containers ---
   const partButtons = h("div", { class: "seg", role: "group", "aria-label": "IELTS part" });
   const partDesc = h("p", { class: "muted small seg-desc" });
-  const topicSelect = h("select", { id: "topic" });
+  const clusterList = h("ul", { class: "cluster-list" });
+  const topicBox = h("div", { class: "topic-tiles" });
   const genTopic = h("input", { id: "gen-topic", type: "text", maxlength: 100, placeholder: "e.g. Weekends" });
   const browseBox = h("div", {});
   const workBox = h("div", {});
+  const relatedBox = h("div", { class: "chips" });
+  const storiesBox = h("div", {});
+  const randomBtn = h("button", { class: "btn btn-primary", type: "button" }, "Random question");
+  const genBtn = h("button", { class: "btn btn-small", type: "button" }, "Generate with AI");
+  const currentCluster = () => clusters.find((c) => c.slug === st.cluster) || null;
 
   function drawParts() {
     setChildren(partButtons, PARTS.map((p) => h("button", { type: "button", "aria-pressed": String(p.n === st.part), onclick: () => setPart(p.n) }, p.title)));
     partDesc.textContent = PARTS[st.part - 1].desc;
   }
 
+  function drawClusters() {
+    setChildren(
+      clusterList,
+      myGroups.length ? h("li", { class: "list-label" }, "My groups") : null,
+      myGroups.map((g) => h("li", {}, h("button", { type: "button", class: "cluster-btn", "aria-pressed": String(!!st.group && st.group.id === g.id), onclick: () => selectGroup(g) }, h("span", { class: "cluster-ico" }, icon("book", 20)), h("span", { class: "cluster-txt" }, h("strong", {}, g.name), h("small", {}, `${g.question_count} questions`))))),
+      myGroups.length ? h("li", { class: "list-label" }, "Topic groups") : null,
+      clusters.map((c) =>
+        h("li", {}, h("button", { type: "button", class: "cluster-btn", "aria-pressed": String(c.slug === st.cluster), onclick: () => selectCluster(c.slug) }, h("span", { class: "cluster-ico" }, icon(CLUSTER_ICON[c.slug] || "spark", 20)), h("span", { class: "cluster-txt" }, h("strong", {}, c.name), h("small", {}, `${c.topics.length} topics`)))),
+      ),
+    );
+  }
+
   function drawTopics() {
-    const options = topics.filter((t) => t.parts.includes(st.part));
-    setChildren(topicSelect, h("option", { value: "" }, "Any topic"), options.map((t) => h("option", { value: t.topic, selected: t.topic === st.topic }, t.topic)));
+    const c = currentCluster();
+    if (st.group) {
+      setChildren(topicBox, h("p", { class: "muted small" }, `Your group “${st.group.name}”: ${st.group.topics.length ? st.group.topics.join(", ") : "individual questions"}.`, " ", h("a", { href: "#/library" }, "Edit in Library")));
+      return;
+    }
+    if (!c) {
+      setChildren(topicBox, h("p", { class: "muted small" }, clusters.length ? "Pick a topic group to see its topics, or press Random question for anything." : "Press Random question to start."));
+      return;
+    }
+    setChildren(
+      topicBox,
+      h("p", { class: "muted small" }, c.blurb),
+      h("div", { class: "chips" }, c.topics.map((t) => h("button", { type: "button", class: "tchip", "aria-pressed": String(t.topic === st.topic), onclick: () => selectTopic(t.topic) }, t.topic, h("small", {}, String(t.counts[st.part] || 0))))),
+    );
+  }
+
+  function drawRelated() {
+    const base = st.question ? st.question.topic : st.topic;
+    const own = base ? clustersOf(base) : [];
+    const score = new Map();
+    for (const c of own) for (const t of c.topics) if (t.topic !== base) score.set(t.topic, (score.get(t.topic) || 0) + 1);
+    const items = [...score.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8);
+    setChildren(relatedBox, items.length ? items.map(([t]) => h("button", { type: "button", class: "tchip", onclick: () => { st.cluster = (own.find((c) => c.topics.some((x) => x.topic === t)) || own[0]).slug; selectTopic(t); } }, t)) : h("p", { class: "muted small" }, "Choose a topic to see related ones."));
+  }
+
+  async function drawSuggestions(q) {
+    storiesBox.replaceChildren();
+    if (!q || !q.id || q.part !== 2) return;
+    try {
+      const items = await api.suggestStories(q.id);
+      if (st.question !== q) return;
+      setChildren(
+        storiesBox,
+        h("h3", {}, "Your stories that fit"),
+        items.length ? h("ul", { class: "rows" }, items.map((s) => h("li", {}, h("a", { href: "#/stories" }, s.title)))) : h("p", { class: "muted small" }, "No saved story fits this cue card yet. Write one in Stories and reuse it here."),
+      );
+    } catch {
+      /* suggestions are optional */
+    }
+  }
+
+  function redraw() {
+    drawClusters();
+    drawTopics();
+    drawRelated();
   }
 
   function setPart(n) {
@@ -77,27 +134,61 @@ export async function render(root, ctx) {
     st.question = null;
     st.session = null;
     drawParts();
-    drawTopics();
+    redraw();
     browseBox.replaceChildren();
     workBox.replaceChildren();
+    storiesBox.replaceChildren();
+    if (st.group) loadGroup();
   }
 
-  topicSelect.addEventListener("change", () => {
-    st.topic = topicSelect.value;
-    genTopic.value = st.topic;
-  });
+  async function loadGroup() {
+    browseBox.replaceChildren(spinner());
+    try {
+      const d = await api.group(st.group.id, st.part);
+      groupQuestions = d.questions;
+      browseBox.replaceChildren(questionList(groupQuestions));
+    } catch (err) {
+      browseBox.replaceChildren(errorBox(err));
+    }
+  }
 
-  // --- choosing a question ---
+  function selectGroup(g) {
+    st.group = g;
+    st.cluster = null;
+    st.topic = "";
+    redraw();
+    loadGroup();
+  }
+
+  function selectCluster(slug) {
+    st.group = null;
+    st.cluster = slug;
+    st.topic = "";
+    redraw();
+    browseBox.replaceChildren();
+  }
+
+  async function selectTopic(topic) {
+    st.group = null;
+    st.topic = topic;
+    genTopic.value = topic;
+    redraw();
+    browseBox.replaceChildren(spinner());
+    try {
+      const items = await api.questions({ part: st.part, topic, limit: 30 });
+      browseBox.replaceChildren(questionList(items));
+    } catch (err) {
+      browseBox.replaceChildren(errorBox(err));
+    }
+  }
+
   function choose(q) {
     st.question = q;
     browseBox.replaceChildren();
     drawWork();
+    drawRelated();
     workBox.scrollIntoView({ behavior: "smooth", block: "start" });
   }
-
-  const randomBtn = h("button", { class: "btn btn-primary", type: "button" }, "Random question");
-  const browseBtn = h("button", { class: "btn", type: "button" }, "Browse questions");
-  const genBtn = h("button", { class: "btn", type: "button" }, "Generate with AI");
 
   function questionList(items, intro) {
     return h(
@@ -105,41 +196,31 @@ export async function render(root, ctx) {
       { class: "section" },
       intro ? h("p", { class: "muted" }, intro) : null,
       items.length
-        ? h(
-            "ul",
-            { class: "rows" },
-            items.map((q) =>
-              h(
-                "li",
-                {},
-                h("div", { class: "row-main" }, h("div", {}, h("div", { class: "row-title" }, q.text), h("div", { class: "row-meta" }, chip(q.topic), q.is_ai_generated ? chip("AI generated", "chip-accent") : null)), h("button", { class: "btn", type: "button", onclick: () => choose(q) }, "Practise this")),
-              ),
-            ),
-          )
-        : h("p", { class: "muted" }, "No questions match. Try another topic, or generate new ones."),
+        ? h("ul", { class: "rows" }, items.map((q) => h("li", {}, h("div", { class: "row-main" }, h("div", {}, h("div", { class: "row-title" }, q.text), h("div", { class: "row-meta" }, chip(q.topic), q.is_ai_generated ? chip("AI generated", "chip-accent") : null)), h("button", { class: "btn", type: "button", onclick: () => choose(q) }, "Practise this")))))
+        : h("p", { class: "muted" }, `No Part ${st.part} questions for this topic yet. Generate some with AI on the right.`),
     );
   }
 
-  randomBtn.addEventListener("click", () =>
-    withBusy(randomBtn, "Finding…", async () => {
-      try {
-        choose(await api.randomQuestion({ part: st.part, topic: st.topic }));
-      } catch (err) {
-        toast(err.status === 404 ? "No questions for that topic yet. Try another topic or generate some." : err.message, "error");
-      }
-    }),
-  );
-
-  browseBtn.addEventListener("click", () =>
-    withBusy(browseBtn, "Loading…", async () => {
-      try {
-        const items = await api.questions({ part: st.part, topic: st.topic, limit: 30 });
-        browseBox.replaceChildren(questionList(items));
-      } catch (err) {
-        browseBox.replaceChildren(errorBox(err));
-      }
-    }),
-  );
+  async function pickRandom() {
+    if (st.group) {
+      if (!groupQuestions.length) await loadGroup();
+      if (groupQuestions.length) return choose(groupQuestions[Math.floor(Math.random() * groupQuestions.length)]);
+      toast(`No Part ${st.part} questions in this group yet.`, "error");
+      return;
+    }
+    let topic = st.topic;
+    const c = currentCluster();
+    if (!topic && c) {
+      const open = c.topics.filter((t) => t.counts[st.part] > 0);
+      if (open.length) topic = open[Math.floor(Math.random() * open.length)].topic;
+    }
+    try {
+      choose(await api.randomQuestion({ part: st.part, topic }));
+    } catch (err) {
+      toast(err.status === 404 ? "No questions for that topic yet. Try another topic or generate some." : err.message, "error");
+    }
+  }
+  randomBtn.addEventListener("click", () => withBusy(randomBtn, "Finding…", pickRandom));
 
   genBtn.addEventListener("click", () => {
     const topic = genTopic.value.trim();
@@ -149,7 +230,7 @@ export async function render(root, ctx) {
       return;
     }
     return withBusy(genBtn, "Generating…", async () => {
-      browseBox.replaceChildren(spinner("The local model is writing questions. This can take a minute."));
+      browseBox.replaceChildren(spinner("The AI is writing questions. This can take up to a minute."));
       try {
         const items = await api.generateQuestions({ part: st.part, topic, count: 3 });
         browseBox.replaceChildren(questionList(items, `New questions on “${topic}” were added to your question bank.`));
@@ -173,7 +254,7 @@ export async function render(root, ctx) {
       st.answer = answer.value;
       wordCount.textContent = `${countWords(answer.value)} words`;
     });
-    const timer = makeTimer();
+    const recorder = makeRecorder({ onText: (t) => { answer.value = `${answer.value} ${t}`.trim(); answer.dispatchEvent(new Event("input")); }, targetSeconds: st.part === 2 ? 120 : 60 });
     const evalBtn = h("button", { class: "btn btn-primary", type: "button" }, "Evaluate answer");
     const status = h("div", {});
     const resultBox = h("div", {});
@@ -188,7 +269,7 @@ export async function render(root, ctx) {
 
     sampleBtn.addEventListener("click", () =>
       withBusy(sampleBtn, "Writing…", async () => {
-        sampleBox.replaceChildren(spinner("The local model is writing a sample answer. This can take a minute."));
+        sampleBox.replaceChildren(spinner("The AI is writing a sample answer. This can take up to a minute."));
         try {
           const r = await api.sampleAnswer({ part: st.part, question_text: fullQuestionText(q), target_band: Number(bandSelect.value) });
           sampleBox.replaceChildren(
@@ -242,7 +323,7 @@ export async function render(root, ctx) {
       resultBox.replaceChildren();
       followBox.replaceChildren();
       await withBusy(evalBtn, "Evaluating…", async () => {
-        status.replaceChildren(spinner("The local model is reading your answer. This can take a minute."));
+        status.replaceChildren(spinner("The AI is reading your answer. This can take up to a minute."));
         try {
           if (!st.session || st.session.part !== st.part) {
             st.session = await api.createSession({ part: st.part, topic: q.topic || null });
@@ -252,7 +333,7 @@ export async function render(root, ctx) {
           status.replaceChildren();
           const followBtn = h("button", { class: "btn", type: "button" }, "Get follow-up questions");
           followBtn.addEventListener("click", () => showFollowUps(followBtn, text));
-          const nextBtn = h("button", { class: "btn btn-primary", type: "button", onclick: () => randomBtn.click() }, "Next random question");
+          const nextBtn = h("button", { class: "btn btn-primary", type: "button", onclick: () => pickRandom() }, "Next random question");
           resultBox.replaceChildren(
             h("section", { class: "section" }, evaluationView(saved.evaluation, text), h("div", { class: "btn-row", style: "margin-top:18px" }, followBtn, nextBtn), followBox),
           );
@@ -263,6 +344,7 @@ export async function render(root, ctx) {
       });
     });
 
+    drawSuggestions(q);
     workBox.replaceChildren(
       h(
         "section",
@@ -274,39 +356,46 @@ export async function render(root, ctx) {
           h("p", { class: "q-text" }, q.text),
           q.cue_points && q.cue_points.length ? h("ul", {}, q.cue_points.map((c) => h("li", {}, c))) : null,
         ),
-        h("label", { for: "answer" }, "Your answer"),
+        h("h3", { style: "margin:0 0 8px" }, "Speak your answer"),
+        recorder,
+        h("label", { for: "answer", style: "margin-top:16px" }, "Your answer (this is what gets marked)"),
         answer,
-        h("div", { class: "counter", id: "count-line" }, h("span", {}, wordCount, ` · aim for ${LENGTH_HINT[st.part]}`), h("span", {}, timer.out, " ", timer.button)),
+        h("div", { class: "counter", id: "count-line" }, h("span", {}, wordCount, ` · aim for ${LENGTH_HINT[st.part]}`), h("span", {})),
         h("div", { class: "btn-row" }, evalBtn),
-        h("p", { class: "muted small", style: "margin-top:10px" }, "Type or paste a transcript of what you said, for example from your phone's voice typing. Audio recording is not supported yet."),
+        h("p", { class: "muted small", style: "margin-top:10px" }, "Recordings are for listening back. Marking uses the text in the box, so type what you said or turn on “Also type what I say”. Marking your voice directly is coming later."),
         status,
         h("div", { class: "inline-fields", style: "margin-top:18px" }, h("div", { class: "field" }, h("label", { for: "sample-band" }, "Sample answer at band"), bandSelect), sampleBtn),
       ),
       sampleBox,
       resultBox,
     );
-    answer.focus({ preventScroll: true });
   }
 
+  const tip = TIPS[Math.floor(Math.random() * TIPS.length)];
   root.append(
-    h("div", { class: "page-head" }, h("h1", {}, "Practice"), h("p", { class: "lede" }, "Choose a part and a question, then answer it in writing.")),
+    banner({ title: "Let’s practise your speaking", lede: "Pick a topic group, choose a question, then speak or type your answer.", image: "practice-hero", compact: true }),
     h(
-      "section",
-      { class: "section" },
-      partButtons,
-      partDesc,
-      h("div", { class: "inline-fields", style: "margin-top:16px" }, h("div", { class: "field", style: "min-width:220px" }, h("label", { for: "topic" }, "Topic"), topicSelect)),
-      h("div", { class: "btn-row", style: "margin-top:16px" }, randomBtn, browseBtn),
+      "div",
+      { class: "practice-grid" },
+      h("aside", { class: "col-left", "aria-label": "Topic groups" }, h("h2", { class: "col-title" }, "Topic groups"), clusterList),
       h(
         "div",
-        { class: "inline-fields", style: "margin-top:22px" },
-        h("div", { class: "field", style: "min-width:220px" }, h("label", { for: "gen-topic" }, "Need something new? Topic for new questions"), genTopic),
-        genBtn,
+        { class: "col-main" },
+        h("section", { class: "section" }, partButtons, partDesc, topicBox, h("div", { class: "btn-row", style: "margin-top:14px" }, randomBtn)),
+        browseBox,
+        workBox,
+      ),
+      h(
+        "aside",
+        { class: "col-right", "aria-label": "Related" },
+        h("section", { class: "side-card" }, h("h3", {}, "Related topics"), relatedBox),
+        h("section", { class: "side-card" }, storiesBox, h("a", { href: "#/stories", class: "small" }, "Open my stories")),
+        h("section", { class: "side-card tip" }, h("h3", {}, icon("spark", 16), " Tip"), h("p", { class: "small" }, tip)),
+        h("section", { class: "side-card" }, h("h3", {}, "Need something new?"), h("div", { class: "field" }, h("label", { for: "gen-topic" }, "Topic for new questions"), genTopic), genBtn),
       ),
     ),
-    browseBox,
-    workBox,
   );
   drawParts();
-  drawTopics();
+  redraw();
+  if (pending) choose(pending);
 }

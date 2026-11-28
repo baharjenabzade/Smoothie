@@ -5,7 +5,7 @@ import pytest
 for _module in ("fastapi", "sqlalchemy", "httpx", "bcrypt", "jwt", "pydantic_settings", "email_validator"):
     pytest.importorskip(_module)
 
-from app.ai.schemas import (  # noqa: E402
+from app.ai.schemas import (
     EvaluationResult,
     Exercise,
     FocusArea,
@@ -17,8 +17,8 @@ from app.ai.schemas import (  # noqa: E402
     TopicVocabulary,
     VocabularyEntry,
 )
-from app.core.errors import LLMError  # noqa: E402
-from tests.fakes import TRANSCRIPT, make_evaluation  # noqa: E402
+from app.core.errors import LLMError
+from tests.fakes import TRANSCRIPT, make_evaluation
 
 API = "/api/v1"
 QUESTION = "Do you like living in a big city?"
@@ -102,7 +102,7 @@ def test_endpoints_require_a_token(client, path):
 
 
 def test_browse_seeded_questions(client, auth, seeded):
-    assert seeded == 48
+    assert seeded >= 48
 
     topics = client.get(f"{API}/questions/topics", headers=auth).json()
     travel = next(t for t in topics if t["topic"] == "Travel")

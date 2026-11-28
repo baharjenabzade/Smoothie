@@ -1,14 +1,26 @@
 import { api } from "../api.js";
 import { h, formatBand, formatDate, plural, emptyState, chip } from "../ui.js";
+import { banner, icon, pic } from "../art.js";
 import { CRITERIA, PART_LABELS, criterionBars, trendChart } from "../components.js";
 
 export async function render(root, ctx) {
   const d = await api.dashboard();
 
-  root.append(h("div", { class: "page-head" }, h("h1", {}, "Dashboard"), h("p", { class: "lede" }, "Your progress across every answer you have submitted.")));
+  const first = (ctx.user.full_name || "").split(" ")[0];
+  root.append(
+    banner({ title: first ? `Hey, ${first}!` : "Welcome back!", lede: "Every answer brings you closer to your target band.", image: "dashboard-hero", actions: [h("a", { class: "btn btn-primary", href: "#/practice" }, "Start speaking practice"), h("a", { class: "btn", href: "#/stories" }, "Open my stories")] }),
+    h(
+      "div",
+      { class: "quick-links" },
+      h("a", { href: "#/practice" }, icon("mic", 20), h("span", {}, h("strong", {}, "Practise by topic"), h("small", {}, "10 topic groups"))),
+      h("a", { href: "#/stories" }, icon("book", 20), h("span", {}, h("strong", {}, "Story Studio"), h("small", {}, "One story, many cue cards"))),
+      h("a", { href: "#/stories" }, icon("headphones", 20), h("span", {}, h("strong", {}, "Listen & learn"), h("small", {}, "Illustrated short stories"))),
+    ),
+  );
 
   if (d.total_answers === 0) {
     root.append(
+      h("div", { class: "empty-pic" }, pic("result-hero", "")),
       emptyState("No answers yet", "Answer one question and your band, trend and recurring mistakes will appear here.", h("a", { class: "btn btn-primary", href: "#/practice" }, "Start practising")),
     );
     return;

@@ -1,5 +1,6 @@
 import { api, setToken } from "../api.js";
 import { h, errorBox, withBusy, brandMark } from "../ui.js";
+import { pic } from "../art.js";
 
 const BAND_OPTIONS = [];
 for (let b = 4; b <= 9; b += 0.5) BAND_OPTIONS.push(b);
@@ -16,8 +17,14 @@ export function renderAuth(app, ctx, initialMode = "login") {
     );
   }
 
+  const artHost = h("div", { class: "auth-art" });
+  function drawArt() {
+    artHost.replaceChildren(pic(mode === "register" ? "mascot-books" : "girl-smoothie", ""));
+  }
+
   function setMode(next) {
     mode = next;
+    drawArt();
     drawTabs();
     drawForm();
   }
@@ -84,11 +91,13 @@ export function renderAuth(app, ctx, initialMode = "login") {
         h("h1", {}, "Practise speaking. See exactly what to fix."),
         h("p", {}, "Answer questions from all three parts of the test, then get your answer back marked: each grammar slip struck through with the correction beside it."),
         h("ul", {}, h("li", {}, "Scores for fluency and coherence, vocabulary, and grammar"), h("li", {}, "A vocabulary notebook built from your own answers"), h("li", {}, "A record of the mistakes that keep coming back")),
+        artHost,
         h("p", { class: "small", style: "margin-top:14px" }, "Bands are estimates from the text of your answer. Pronunciation is not assessed yet."),
       ),
       h("div", { class: "auth-form" }, tabs, formHost),
     ),
   );
   drawTabs();
+  drawArt();
   drawForm();
 }

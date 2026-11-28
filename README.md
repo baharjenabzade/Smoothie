@@ -148,9 +148,52 @@ Set via environment variables or `.env` (see `.env.example`).
 | `ENVIRONMENT` | `development` | `development` · `test` · `production` |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | `1440` | |
 | `CORS_ORIGINS` | localhost:3000, localhost:5173 | JSON list |
+| `LLM_PROVIDER` | `ollama` | `ollama` or `gemini` |
+| `GEMINI_API_KEY` / `GEMINI_MODEL` | empty / `gemini-2.5-flash` | Used when `LLM_PROVIDER=gemini` |
 | `OLLAMA_BASE_URL` / `OLLAMA_MODEL` | `http://localhost:11434` / `qwen3:8b` | Any Ollama model that supports structured outputs |
 | `OLLAMA_TIMEOUT_SECONDS` | `180` | Raise this on slow hardware |
 | `OLLAMA_THINK` | `false` | Qwen3 thinking mode: slower, usually not needed |
+
+## Using Gemini instead of the local model
+
+1. Create a free key at https://aistudio.google.com/apikey.
+2. In `.env` set:
+   ```
+   LLM_PROVIDER=gemini
+   GEMINI_API_KEY=your-key
+   GEMINI_MODEL=gemini-2.5-flash
+   ```
+3. Run `python -m app.gemini_models` to list the models your key can use, and pick one for `GEMINI_MODEL`.
+4. Restart the server and open `/health/ai`; it should report `"provider": "gemini"` and `"model_available": true`.
+
+Set `LLM_PROVIDER=ollama` to switch back at any time.
+
+Notes: the free tier has rate limits (the client retries briefly on 429, but a daily quota error is reported as-is); Google may not offer the API in every country (the check is on the request location, so a key alone does not fix that); on the free tier Google may use submitted content to improve its products, so check their current terms before sending anything private; model names change over time.
+
+## Topic clusters, Story Studio, recording and listening
+
+After updating, run `alembic upgrade head` (adds the `stories` table) and `python -m app.seed` (adds 34 more Part 2 cue cards; existing ones are skipped).
+
+- **Topic clusters** (`app/clusters.py`): 10 themes grouping topics; a topic can sit in several. The Practice page uses them for navigation and related topics.
+- **Story Studio**: save real stories, tag them with clusters, see compatible Part 2 cue cards (shared clusters plus shared key words, no AI call) and ask the AI how to adapt a story to a card (`POST /stories/{id}/adapt`).
+- **Voice recording**: recorded in the browser and played back locally; audio is never uploaded. The optional "also type what I say" uses the browser's own speech service and may be unavailable in some regions.
+- **Listen & learn**: six short illustrated stories (`frontend/js/stories-data.js`) read aloud with the device's text-to-speech.
+
+## Library: your own groups, importing questions, similar questions
+
+Run `alembic upgrade head` again (adds `topic_groups`).
+
+- **My groups**: pick any topics (and later individual questions) to make your own group. Groups appear in the Practice page, and you can generate sample answers for several questions at once.
+- **Import questions** (`POST /questions/import`): paste text or open a .txt/.csv/.json file. Headings such as `Part 2` and `Topic: Hometown`, numbered lists and cue cards with bullet points are understood. Duplicates are skipped. The parser is `frontend/js/importer.js` (test: `node frontend/tests/importer.test.mjs`). Only import material you are allowed to use; this project does not include commercial question banks.
+- **Similar questions**: questions that ask about the same thing are grouped by shared key words (no AI call). It is lexical, so review groups before relying on them; save a group to My groups with one click.
+- Questions you import go into the shared question bank of this installation.
+
+Pictures live in `frontend/img/` (WebP). Replace a file with the same name to change it.
+
+## Strict scoring and reference answers (RAG)
+
+- **Strict scoring** (`SCORING_STRICTNESS=strict`, default): the prompt tells the model to start at band 5, choose the lower band when unsure and cite evidence first. After that, code only ever lowers scores: short answers cap Fluency, the density of verified grammar errors caps Grammar, no criterion may sit more than 1.5 bands above the lowest, and the overall band rounds down to the half band. The UI lists any caps applied. These rules are heuristics from the public descriptors, not official IELTS rules; tune the tables in `app/services/calibration.py`.
+- **Reference answers**: put your graded answers in `knowledge/samples/` (see `knowledge/README.md`). Each evaluation retrieves up to 3 of the same part (BM25 on question, topic and answer, preferring different bands) and shows them to the model as calibration. Check with `python -m app.rag_check`.
 
 ## Tests
 

@@ -5,10 +5,13 @@ from sqlalchemy.orm import Session
 from app.ai import prompts
 from app.ai.client import LLMClient
 from app.ai.schemas import EvaluationResult
+from app.core.config import get_settings
 from app.core.errors import AppError, NotFoundError
 from app.core.scoring import count_words, overall_band
 from app.models import Answer, Evaluation, GrammarIssue, PracticeSession, Question, User
+from app.rag.retrieval import reference_samples_for
 from app.schemas.practice import AnswerCreate
+from app.services.calibration import calibrate, strict_round
 from app.services.grounding import ground_result
 from app.services.vocabulary import upsert_vocabulary
 
@@ -55,6 +58,7 @@ def evaluate_and_store(
         answer=answer_text,
         word_count=words,
         target_band=user.target_band,
+        references=reference_samples_for(part=session.part, question=question_text, answer=answer_text),
     )
 
     # Release the DB connection back to the pool while the (slow) model is working.
@@ -63,10 +67,18 @@ def evaluate_and_store(
         llm.generate(system=system, user=prompt, schema=EvaluationResult), answer_text
     )
 
-    fluency = result.fluency_coherence.score
-    lexical = result.lexical_resource.score
-    grammar = result.grammatical_range_accuracy.score
-    band = overall_band(fluency, lexical, grammar)
+    strict = get_settings().scoring_strictness == "strict"
+    cal = calibrate(result, part=session.part, word_count=words, strict=strict)
+    fluency, lexical, grammar = cal.fluency, cal.lexical, cal.grammar
+    average = (fluency + lexical + grammar) / 3
+    band = strict_round(average) if strict else overall_band(fluency, lexical, grammar)
+    result = result.model_copy(
+        update={
+            "fluency_coherence": result.fluency_coherence.model_copy(update={"score": fluency}),
+            "lexical_resource": result.lexical_resource.model_copy(update={"score": lexical}),
+            "grammatical_range_accuracy": result.grammatical_range_accuracy.model_copy(update={"score": grammar}),
+        }
+    )
     topic = session.topic or (question.topic if question else None)
 
     evaluation = Evaluation(
@@ -75,7 +87,7 @@ def evaluate_and_store(
         lexical_score=lexical,
         grammar_score=grammar,
         overall_band=band,
-        feedback=result.model_dump(mode="json"),
+        feedback={**result.model_dump(mode="json"), "calibration_notes": cal.notes},
         model_name=llm.model_name,
     )
     evaluation.grammar_issues = [

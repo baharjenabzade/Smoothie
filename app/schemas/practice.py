@@ -47,6 +47,12 @@ class AnswerCreate(BaseModel):
         return self
 
 
+class StoredFeedback(EvaluationResult):
+    """The model's feedback plus notes on any score limits our own checks applied."""
+
+    calibration_notes: list[str] = Field(default_factory=list)
+
+
 class EvaluationRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -55,7 +61,7 @@ class EvaluationRead(BaseModel):
     lexical_score: float
     grammar_score: float
     overall_band: float
-    feedback: EvaluationResult
+    feedback: StoredFeedback
     model_name: str
     created_at: datetime
     disclaimer: str = DISCLAIMER

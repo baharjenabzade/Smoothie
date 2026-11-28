@@ -1,4 +1,5 @@
 import { api } from "../api.js";
+import { banner } from "../art.js";
 import { h, setChildren, toast, spinner, errorBox, withBusy, plural, emptyState, chip } from "../ui.js";
 import { CRITERIA, GRAMMAR_CATEGORIES, criterionBars } from "../components.js";
 
@@ -6,7 +7,7 @@ const PAGE = 20;
 
 export async function render(root, ctx) {
   const report = await api.weaknesses();
-  root.append(h("div", { class: "page-head" }, h("h1", {}, "Insights"), h("p", { class: "lede" }, "What your evaluated answers say about where to focus.")));
+  root.append(banner({ title: "Insights", lede: "What your evaluated answers say about where to focus.", image: "insights-hero", compact: true }));
 
   if (report.evaluations_analyzed === 0) {
     root.append(emptyState("Nothing to analyse yet", "Insights are built from your evaluated answers. Submit one and come back.", h("a", { class: "btn btn-primary", href: "#/practice" }, "Start practising")));
@@ -29,7 +30,7 @@ export async function render(root, ctx) {
   const planBtn = h("button", { class: "btn btn-primary", type: "button" }, "Create my practice plan");
   planBtn.addEventListener("click", () =>
     withBusy(planBtn, "Writing your plan…", async () => {
-      planHost.replaceChildren(spinner("The local model is building a plan from your results. This can take a minute."));
+      planHost.replaceChildren(spinner("The AI is building a plan from your results. This can take up to a minute."));
       try {
         const r = await api.recommendations();
         setChildren(
